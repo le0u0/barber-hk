@@ -43,7 +43,11 @@ export function CutBoard() {
           const photo = (
             <Image
               src={front.image}
-              alt={`${view.nameEn} — ${view.nameYue}, front view`}
+              alt={
+                view.orbit
+                  ? `${view.nameEn} — ${view.nameYue}, front view`
+                  : `${view.nameEn} — ${view.nameYue}, front view. Synthetic reference, not a customer photo.`
+              }
               width={360}
               height={480}
               unoptimized
@@ -69,7 +73,12 @@ export function CutBoard() {
                   {photo}
                   {names}
                   <figcaption className="front-only">
-                    Front only <span lang="zh-HK">只有正面</span>
+                    <span>
+                      Front only <span lang="zh-HK">只有正面</span>
+                    </span>
+                    <span>
+                      Synthetic ref <span lang="zh-HK">合成參考</span>
+                    </span>
                   </figcaption>
                 </figure>
               </li>

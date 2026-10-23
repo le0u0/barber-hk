@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { listCutCards } from "./catalog";
 import { ANGLE_ORDER, cutView, listCutViews, slideAnnouncement, stepAngle } from "./cut-views";
 
 const DEMO = ["crop-fade", "french-crop", "two-block"] as const;
@@ -26,8 +27,8 @@ describe("cut views", () => {
     for (const view of stills) {
       expect(view.frames).toHaveLength(1);
       expect(view.frames[0].angle).toBe("front");
-      expect(view.frames[0].image).not.toContain("/angles/");
-      expect(view.frames[0].image).not.toContain(view.id);
+      expect(view.frames[0].image).toBe(`/mtr-assets/angles/${view.id}/front.jpg`);
+      expect(view.frames.map((frame) => frame.angle)).not.toEqual([...ANGLE_ORDER]);
     }
   });
 
@@ -36,7 +37,8 @@ describe("cut views", () => {
       cutId: string;
       angle: string;
       status: string;
-      hash12?: string;
+      source?: string | null;
+      hash12?: string | null;
       path: string;
     }[];
 
@@ -53,11 +55,26 @@ describe("cut views", () => {
       expect(existsSync(join(process.cwd(), "public/mtr-assets/angles", id, "strip-4.jpg"))).toBe(true);
     }
 
+    const cards = new Map(listCutCards().map((card) => [card.id, card.image]));
     for (const id of OFF_DEMO) {
-      expect(existsSync(join(process.cwd(), "public/mtr-assets/angles", id))).toBe(false);
+      const front = join(process.cwd(), "public/mtr-assets/angles", id, "front.jpg");
+      expect(existsSync(front)).toBe(true);
+      const hash12 = createHash("md5").update(readFileSync(front)).digest("hex").slice(0, 12);
       const rows = manifest.filter((entry) => entry.cutId === id);
-      expect(rows.length).toBeGreaterThan(0);
-      expect(rows.every((entry) => entry.status !== "generated")).toBe(true);
+      expect(rows.map((entry) => entry.angle)).toEqual([...ANGLE_ORDER]);
+      const frontRow = rows.find((entry) => entry.angle === "front");
+      expect(frontRow?.status).toBe("generated");
+      expect(frontRow?.source).toBe("front-only synthetic");
+      expect(frontRow?.path).toBe(`mtr-assets/angles/${id}/front.jpg`);
+      expect(frontRow?.hash12).toBe(hash12);
+      expect(cards.get(id)).toBe(`/mtr-assets/angles/${id}/front.jpg`);
+      for (const angle of ANGLE_ORDER) {
+        if (angle === "front") continue;
+        const row = rows.find((entry) => entry.angle === angle);
+        expect(row?.status).toBe("off-demo-path");
+        expect(row?.status).not.toBe("generated");
+        expect(existsSync(join(process.cwd(), "public/mtr-assets/angles", id, `${angle}.jpg`))).toBe(false);
+      }
     }
   });
 

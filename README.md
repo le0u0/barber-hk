@@ -34,7 +34,7 @@ The brief shown on `/brief` is held in `sessionStorage` (`barber-hk:brief`) for 
 - `fixtures/cuts.json` — exactly 8 cuts, stable ids: `crop-fade`, `french-crop`, `two-block`, `side-part`, `curtain`, `undercut`, `pompadour`, `induction`
 - `fixtures/selfie-sample.png` — sample selfie diagram for the upload path (not a customer photo). The same file is served at `/fixtures/selfie-sample.png`. The selfie screen has **Use sample fixture**.
 
-Reference diagrams: `public/cuts/<id>.svg`. East Asian male hair notes are English only, on the brief.
+Cut photos live in `public/mtr-assets/angles/{cutId}/`. Three cuts have four angles. Five cuts (`side-part`, `curtain`, `undercut`, `pompadour`, `induction`) ship `front.jpg` only. East Asian male hair notes are English only, on the brief.
 
 ## Deploy SHA (AC-06)
 

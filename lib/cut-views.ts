@@ -43,13 +43,16 @@ function generatedOrbit(id: string): CutFrame[] | null {
   return frames;
 }
 
-const FRONT_ONLY: Record<string, string> = {
-  "side-part": "/cuts/office-front.jpg",
-  curtain: "/cuts/centre-front.jpg",
-  undercut: "/cuts/slick-front.jpg",
-  pompadour: "/cuts/volume-front.jpg",
-  induction: "/cuts/buzz-front.jpg",
-};
+/**
+ * A single generated front is a still. Missing angles stay off the demo path,
+ * so one `generated` front never opens swipe chrome.
+ */
+function shippedFront(id: string): string | null {
+  const path = `mtr-assets/angles/${id}/front.jpg`;
+  const row = MANIFEST.find((entry) => entry.cutId === id && entry.angle === "front");
+  if (!row || row.status !== "generated" || row.path !== path) return null;
+  return `/${path}`;
+}
 
 export function listCutViews(): CutView[] {
   return listCutCards().map((card) => {
@@ -61,7 +64,7 @@ export function listCutViews(): CutView[] {
       id: card.id,
       nameEn: card.nameEn,
       nameYue: card.nameYue,
-      frames: [{ angle: "front", image: FRONT_ONLY[card.id] ?? card.image }],
+      frames: [{ angle: "front", image: shippedFront(card.id) ?? card.image }],
       orbit: false,
     };
   });
