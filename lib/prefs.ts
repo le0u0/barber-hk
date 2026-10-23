@@ -2,7 +2,9 @@ import type { QuizAnswers } from "./types";
 
 export const PREFS_KEY = "barber-hk:v1";
 export const BRIEF_KEY = "barber-hk:brief";
+export const LAST_BRIEF_KEY = "barber-hk:last-brief";
 export const PREFS_EVENT = "barber-hk-prefs";
+export const BRIEF_EVENT = "barber-hk-brief";
 
 export type Prefs = {
   lang: "en" | "yue";
@@ -66,4 +68,16 @@ export function savePrefs(prefs: Prefs) {
   localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
   invalidatePrefs();
   window.dispatchEvent(new Event(PREFS_EVENT));
+}
+
+export function saveBrief(brief: unknown) {
+  const json = JSON.stringify(brief);
+  sessionStorage.setItem(BRIEF_KEY, json);
+  localStorage.setItem(LAST_BRIEF_KEY, json);
+  window.dispatchEvent(new Event(BRIEF_EVENT));
+}
+
+export function readBriefRaw(): string | null {
+  if (typeof window === "undefined") return null;
+  return sessionStorage.getItem(BRIEF_KEY) || localStorage.getItem(LAST_BRIEF_KEY);
 }

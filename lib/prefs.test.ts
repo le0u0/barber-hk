@@ -1,7 +1,18 @@
 // @vitest-environment jsdom
 
 import { beforeEach, describe, expect, it } from "vitest";
-import { EMPTY_PREFS, PREFS_KEY, invalidatePrefs, isQuiz, loadPrefs, savePrefs } from "./prefs";
+import {
+  BRIEF_KEY,
+  EMPTY_PREFS,
+  LAST_BRIEF_KEY,
+  PREFS_KEY,
+  invalidatePrefs,
+  isQuiz,
+  loadPrefs,
+  readBriefRaw,
+  saveBrief,
+  savePrefs,
+} from "./prefs";
 
 const validQuiz = {
   sides: "skin",
@@ -32,6 +43,7 @@ describe("isQuiz", () => {
 describe("guest prefs", () => {
   beforeEach(() => {
     localStorage.clear();
+    sessionStorage.clear();
     invalidatePrefs();
   });
 
@@ -61,5 +73,15 @@ describe("guest prefs", () => {
 
     expect(loadPrefs()).toEqual({ lang: "yue", quiz: validQuiz, lastCutId: "crop-fade" });
     expect(localStorage.getItem(PREFS_KEY)).toContain("crop-fade");
+  });
+
+  it("keeps the last brief for this tab and the next visit", () => {
+    saveBrief({ cut: { nameEn: "Two-block" } });
+
+    expect(sessionStorage.getItem(BRIEF_KEY)).toContain("Two-block");
+    expect(localStorage.getItem(LAST_BRIEF_KEY)).toContain("Two-block");
+
+    sessionStorage.clear();
+    expect(readBriefRaw()).toContain("Two-block");
   });
 });

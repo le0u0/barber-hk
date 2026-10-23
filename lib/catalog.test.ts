@@ -1,10 +1,32 @@
 import { describe, expect, it } from "vitest";
-import { matchCut } from "./catalog";
+import { cutCard, listCutCards, matchCut } from "./catalog";
+import { cutDisplayName } from "./cut-name";
 import type { QuizAnswers } from "./types";
 
 function quiz(answers: QuizAnswers): QuizAnswers {
   return answers;
 }
+
+describe("cut cards", () => {
+  it("names every cut in English and Cantonese instead of the slug", () => {
+    const cards = listCutCards();
+    expect(cards).toHaveLength(8);
+    for (const card of cards) {
+      expect(cutDisplayName(card, "en")).toBe(card.nameEn);
+      expect(cutDisplayName(card, "yue")).toBe(card.nameYue);
+      expect(card.nameEn).not.toBe(card.id);
+      expect(card.nameYue).not.toBe(card.id);
+      expect(card.nameEn).not.toMatch(/^[a-z0-9-]+$/);
+      expect(card.image.endsWith(".jpg")).toBe(true);
+    }
+  });
+
+  it("resolves a known last pick and hides unknown ids", () => {
+    expect(cutCard("two-block")).toMatchObject({ nameEn: "Two-block", nameYue: "兩節頭" });
+    expect(cutCard("not-a-cut")).toBeNull();
+    expect(cutCard(null)).toBeNull();
+  });
+});
 
 describe("matchCut", () => {
   it("maps a buzz cut to induction", () => {

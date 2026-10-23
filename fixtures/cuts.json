@@ -3,7 +3,7 @@
     "id": "crop-fade",
     "nameEn": "Textured crop fade",
     "nameYue": "碎蓋漸變",
-    "image": "/cuts/crop-fade.svg",
+    "image": "/cuts/textured-crop.jpg",
     "eastAsianNote": "East Asian male hair is often thick and straight, so a crop boxes out if it is only clipper-cut. Ask for point-cutting through the corners and to keep the parietal ridge soft. A low skin fade shows head shape; leave weight off the fringe so it does not sit like a helmet.",
     "brief": {
       "en": {
@@ -26,7 +26,7 @@
     "id": "french-crop",
     "nameEn": "French crop",
     "nameYue": "法式碎蓋",
-    "image": "/cuts/french-crop.svg",
+    "image": "/cuts/french-fringe.jpg",
     "eastAsianNote": "A blunt fringe on straight East Asian hair grows into the eyes within two weeks and can look like a wig line. Leave it just above the brow and texturize only the last centimetre. If there is a crown whorl, cut the fringe with the growth.",
     "brief": {
       "en": {
@@ -49,7 +49,7 @@
     "id": "two-block",
     "nameEn": "Two-block",
     "nameYue": "兩節頭",
-    "image": "/cuts/two-block.svg",
+    "image": "/cuts/two-section.jpg",
     "eastAsianNote": "The two-block is a default Hong Kong and Korean men's cut. On dense straight hair the weight line looks painted on unless the barber cuts it with scissors over the clipper. Do not take the top so short that there is nothing to separate.",
     "brief": {
       "en": {
@@ -72,7 +72,7 @@
     "id": "side-part",
     "nameEn": "Office side part",
     "nameYue": "側分公事頭",
-    "image": "/cuts/side-part.svg",
+    "image": "/cuts/office-part.jpg",
     "eastAsianNote": "Many East Asian men have a whorl that fights a deep side part. Follow the stronger growth and use a soft part, not a shaved line. Keep the sideburn around mid-ear for a Hong Kong office cut.",
     "brief": {
       "en": {
@@ -95,7 +95,7 @@
     "id": "curtain",
     "nameEn": "Curtain middle part",
     "nameYue": "中分八字劉海",
-    "image": "/cuts/curtain.svg",
+    "image": "/cuts/centre-part.jpg",
     "eastAsianNote": "Curtains on straight hair hang like two planks without layers. Keep length through the temples and a slight inward curve at the face. If the crown whorl is strong, part just off centre instead of forcing a dead middle.",
     "brief": {
       "en": {
@@ -118,7 +118,7 @@
     "id": "undercut",
     "nameEn": "Slick undercut",
     "nameYue": "底剷油頭",
-    "image": "/cuts/undercut.svg",
+    "image": "/cuts/slick-back.jpg",
     "eastAsianNote": "A disconnected undercut grows out awkwardly on thick hair, so plan a cleanup every two to three weeks. Keep the disconnection at the parietal ridge, not halfway down the ear, or the top hinges.",
     "brief": {
       "en": {
@@ -141,7 +141,7 @@
     "id": "pompadour",
     "nameEn": "Short pompadour",
     "nameYue": "短龐帕度",
-    "image": "/cuts/pompadour.svg",
+    "image": "/cuts/short-volume.jpg",
     "eastAsianNote": "Straight hair will not hold height from product alone. Leave at least 7 cm, longer at the front than the crown, and thin only the ends. Cutting the root makes the shape collapse. It needs a blow-dry.",
     "brief": {
       "en": {
@@ -164,7 +164,7 @@
     "id": "induction",
     "nameEn": "Induction buzz",
     "nameYue": "陸軍裝",
-    "image": "/cuts/induction.svg",
+    "image": "/cuts/buzz-cut.jpg",
     "eastAsianNote": "A buzz shows head shape. On dense black hair a #1 can look patchy around the whorl; #2 is the safer Hong Kong summer length. Follow the natural hairline — do not square it off — and clip with the grain at the crown.",
     "brief": {
       "en": {
