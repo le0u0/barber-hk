@@ -29,6 +29,10 @@ Leave it empty. The quiz still returns a usable brief from `fixtures/cuts.json`.
 
 The brief shown on `/brief` is held in `sessionStorage` (`barber-hk:brief`) for that tab. Nothing is stored on the server.
 
+## QA
+
+`qa/ac04-nokey` exists for Preview AC-04 (missing-key fallback) testing.
+
 ## QA fixtures
 
 - `fixtures/cuts.json` — exactly 8 cuts, stable ids: `crop-fade`, `french-crop`, `two-block`, `side-part`, `curtain`, `undercut`, `pompadour`, `induction`
