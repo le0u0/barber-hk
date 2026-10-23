@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 160" role="img" aria-label="Office side part reference diagram">
+  <title>Office side part</title>
+  <rect width="120" height="160" fill="#f4efe6"/>
+  <path d="M48 112h24v32H48z" fill="#d7b394"/>
+  <ellipse cx="60" cy="84" rx="28" ry="34" fill="#efd0b0"/>
+  <ellipse cx="34" cy="88" rx="5" ry="8" fill="#e6c4a4"/>
+  <ellipse cx="86" cy="88" rx="5" ry="8" fill="#e6c4a4"/>
+  <path d="M34 76c0-28 12-42 22-44 14 8 30 10 34 40-16-18-28-16-40-8-6 4-12 8-16 12z" fill="#2a2420"/>
+</svg>

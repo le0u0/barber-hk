@@ -1,0 +1,186 @@
+[
+  {
+    "id": "crop-fade",
+    "nameEn": "Textured crop fade",
+    "nameYue": "碎蓋漸變",
+    "image": "/cuts/crop-fade.svg",
+    "eastAsianNote": "East Asian male hair is often thick and straight, so a crop boxes out if it is only clipper-cut. Ask for point-cutting through the corners and to keep the parietal ridge soft. A low skin fade shows head shape; leave weight off the fringe so it does not sit like a helmet.",
+    "brief": {
+      "en": {
+        "ask": "Textured crop, please. Skin fade on the sides, about 3 to 4 cm on top, point-cut the corners, and no blunt fringe line.",
+        "sides": "Low skin fade, blended to about a 1 guard above the ear.",
+        "top": "3–4 cm, point-cut, not a solid block.",
+        "fringe": "Short textured fringe. Do not cut a heavy straight line.",
+        "finish": "Matte clay, piecey. No wet gel."
+      },
+      "yue": {
+        "ask": "師傅，我想剪碎蓋。兩側推皮膚漸變，頂留大約三至四厘米，角位剪薄，額前唔好一刀切。",
+        "sides": "低皮膚漸變，耳仔上面大約一號位銜接。",
+        "top": "頂三至四厘米，剪碎，唔好成塊板。",
+        "fringe": "額前短碎劉海，唔好厚直一刀。",
+        "finish": "用泥蠟抓鬆，唔好濕啫喱。"
+      }
+    }
+  },
+  {
+    "id": "french-crop",
+    "nameEn": "French crop",
+    "nameYue": "法式碎蓋",
+    "image": "/cuts/french-crop.svg",
+    "eastAsianNote": "A blunt fringe on straight East Asian hair grows into the eyes within two weeks and can look like a wig line. Leave it just above the brow and texturize only the last centimetre. If there is a crown whorl, cut the fringe with the growth.",
+    "brief": {
+      "en": {
+        "ask": "French crop. Fringe forward and almost blunt, but break up the edge. Sides short with scissors or a low taper, not a skin fade.",
+        "sides": "Scissor-short or low taper. Not skinned.",
+        "top": "4–5 cm, pushed forward.",
+        "fringe": "Squared fringe sitting on the brow, with a textured edge.",
+        "finish": "Light clay, combed forward."
+      },
+      "yue": {
+        "ask": "我想做法式短劉海。額前留平，尾端剪碎少少，兩側用剪剪短或者低漸變，唔使推到皮膚。頂向前梳。",
+        "sides": "用剪剪短或者低漸變，唔推皮膚。",
+        "top": "頂四至五厘米，向前。",
+        "fringe": "額前近乎平劉海，貼住眉，尾端要碎。",
+        "finish": "少少泥蠟，向前梳。"
+      }
+    }
+  },
+  {
+    "id": "two-block",
+    "nameEn": "Two-block",
+    "nameYue": "兩節頭",
+    "image": "/cuts/two-block.svg",
+    "eastAsianNote": "The two-block is a default Hong Kong and Korean men's cut. On dense straight hair the weight line looks painted on unless the barber cuts it with scissors over the clipper. Do not take the top so short that there is nothing to separate.",
+    "brief": {
+      "en": {
+        "ask": "Two-block. Sides about a 2 or 3 guard, top long enough to separate, and a clear but not drawn-on line.",
+        "sides": "Clipper #2–#3, scissored along the parietal so the line is not harsh.",
+        "top": "6–8 cm, layered enough to separate.",
+        "fringe": "Off the forehead or a soft side sweep. Not a heavy block.",
+        "finish": "Light cream or sea salt, separated. Not slicked flat."
+      },
+      "yue": {
+        "ask": "剪兩節頭。側邊推到大約二至三號，頂留長少少可以分開。分界要清楚，但唔好似用筆畫一條線。",
+        "sides": "側邊二至三號，分界用剪修過，唔好太死。",
+        "top": "頂六至八厘米，要有層次。",
+        "fringe": "額前可以揭起或者輕側掃，唔好厚塊。",
+        "finish": "少少cream或者鹽水抓開，唔好貼死。"
+      }
+    }
+  },
+  {
+    "id": "side-part",
+    "nameEn": "Office side part",
+    "nameYue": "側分公事頭",
+    "image": "/cuts/side-part.svg",
+    "eastAsianNote": "Many East Asian men have a whorl that fights a deep side part. Follow the stronger growth and use a soft part, not a shaved line. Keep the sideburn around mid-ear for a Hong Kong office cut.",
+    "brief": {
+      "en": {
+        "ask": "Office side part. Scissor taper on the sides, clean neck and ears, soft part following the natural growth. No shaved parting line.",
+        "sides": "Scissor taper. Ear and neck cleaned. Sideburn near mid-ear.",
+        "top": "5–7 cm, combed to the natural side.",
+        "fringe": "No heavy fringe. Length goes into the part.",
+        "finish": "Light cream and a comb. Not wet-look gel."
+      },
+      "yue": {
+        "ask": "剪側分公事頭。兩側用剪漸變，耳仔同頸剪乾淨。頂跟自然毛流側分，唔好剃分線。",
+        "sides": "剪漸變，耳同頸乾淨，鬢角大約去到耳中。",
+        "top": "頂五至七厘米，梳去自然嗰邊。",
+        "fringe": "唔留厚劉海，長度歸入側分。",
+        "finish": "少少cream梳貼，唔好硬啫喱。"
+      }
+    }
+  },
+  {
+    "id": "curtain",
+    "nameEn": "Curtain middle part",
+    "nameYue": "中分八字劉海",
+    "image": "/cuts/curtain.svg",
+    "eastAsianNote": "Curtains on straight hair hang like two planks without layers. Keep length through the temples and a slight inward curve at the face. If the crown whorl is strong, part just off centre instead of forcing a dead middle.",
+    "brief": {
+      "en": {
+        "ask": "Middle-part curtains. Long enough to reach the cheek, layered so they are not two boards, temples kept long.",
+        "sides": "Short taper, with length left through the temples.",
+        "top": "8–12 cm, middle part or just off centre.",
+        "fringe": "Two curtains to the cheek, not one blunt block.",
+        "finish": "Light cream, air-dry, then place. Blow-dry only to set the curve."
+      },
+      "yue": {
+        "ask": "我想要中分八字劉海。頂留長，中間分開，兩條劉海落到面頰。太陽穴留長少少，要有層次，唔好兩塊直板。",
+        "sides": "側邊短漸變，太陽穴留返長度。",
+        "top": "頂八至十二厘米，中分或者略為偏中。",
+        "fringe": "兩條劉海到面頰，唔好一嚿直板。",
+        "finish": "少少cream，吹到半乾再擺位。"
+      }
+    }
+  },
+  {
+    "id": "undercut",
+    "nameEn": "Slick undercut",
+    "nameYue": "底剷油頭",
+    "image": "/cuts/undercut.svg",
+    "eastAsianNote": "A disconnected undercut grows out awkwardly on thick hair, so plan a cleanup every two to three weeks. Keep the disconnection at the parietal ridge, not halfway down the ear, or the top hinges.",
+    "brief": {
+      "en": {
+        "ask": "Disconnected undercut. Sides tight under the parietal, top combed back, no fringe. Light pomade, not a helmet.",
+        "sides": "Tight under the parietal ridge, disconnected from the top.",
+        "top": "6–8 cm, combed back or to the side.",
+        "fringe": "No fringe. Hair off the forehead.",
+        "finish": "Light pomade and a comb. Sheen, not a wet helmet."
+      },
+      "yue": {
+        "ask": "底剷，頂梳後。側邊推到好短，同頂分開，分界喺側脊。額前梳起，唔留劉海。用少少pomade。",
+        "sides": "側脊下面推短，同頂唔連接。",
+        "top": "頂六至八厘米，梳後或者側。",
+        "fringe": "唔留劉海，額前揭起。",
+        "finish": "少少pomade梳好，有光但唔好成個頭盔。兩三個禮拜收一次。"
+      }
+    }
+  },
+  {
+    "id": "pompadour",
+    "nameEn": "Short pompadour",
+    "nameYue": "短龐帕度",
+    "image": "/cuts/pompadour.svg",
+    "eastAsianNote": "Straight hair will not hold height from product alone. Leave at least 7 cm, longer at the front than the crown, and thin only the ends. Cutting the root makes the shape collapse. It needs a blow-dry.",
+    "brief": {
+      "en": {
+        "ask": "Short pompadour. Tight sides, front longer than the crown, blown up and back. Do not thin the root.",
+        "sides": "Tight taper or low skin fade.",
+        "top": "7–10 cm, front longer than the crown.",
+        "fringe": "Lifted off the forehead.",
+        "finish": "Matte paste and a blow-dry for height."
+      },
+      "yue": {
+        "ask": "短龐帕度。頂留長，前面再長少少，吹高向後。兩側緊漸變。唔好剪薄個根，只修尾，不然會塌。",
+        "sides": "兩側緊漸變或者低皮膚漸變。",
+        "top": "頂七至十厘米，前面長過頭頂。",
+        "fringe": "額前吹起，唔貼額。",
+        "finish": "霧面蠟加風筒，先至企得住。"
+      }
+    }
+  },
+  {
+    "id": "induction",
+    "nameEn": "Induction buzz",
+    "nameYue": "陸軍裝",
+    "image": "/cuts/induction.svg",
+    "eastAsianNote": "A buzz shows head shape. On dense black hair a #1 can look patchy around the whorl; #2 is the safer Hong Kong summer length. Follow the natural hairline — do not square it off — and clip with the grain at the crown.",
+    "brief": {
+      "en": {
+        "ask": "All over with a 2 guard. Follow my natural hairline, do not square it, and go with the grain on the crown.",
+        "sides": "Same length as the top. No fade.",
+        "top": "#2 all over. #1 only if a shorter cut is requested.",
+        "fringe": "None.",
+        "finish": "No style product. Optional light oil on the scalp."
+      },
+      "yue": {
+        "ask": "全頭一個長度，用二號。跟自然髮線，唔好剃成方形。有旋就順住毛流推。唔使造型。",
+        "sides": "同頂一樣長度，唔使漸變。",
+        "top": "全頭二號。想再短先至用一號。",
+        "fringe": "冇劉海。",
+        "finish": "唔使造型。頭皮可以少少油。"
+      }
+    }
+  }
+]
