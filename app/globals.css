@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+body {
+  background: #f4efe6;
+  color: #1c1915;
+  font-family: var(--font-sans), "PingFang HK", "Noto Sans HK", "Microsoft JhengHei", sans-serif;
+}
