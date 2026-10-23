@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { slideAnnouncement, stepAngle, type CutFrame } from "@/lib/cut-views";
+import { carouselLabel, slideAnnouncement, stepAngle, type CutFrame } from "@/lib/cut-views";
 
 function useReducedMotion() {
   return useSyncExternalStore(
@@ -82,11 +82,12 @@ export function CutCarousel({
 
   return (
     <section
+      id="cut-orbit"
       ref={region}
       className="orbit"
       role="region"
       aria-roledescription="carousel"
-      aria-label={`${nameEn} angles. Synthetic reference, not a customer photo.`}
+      aria-label={carouselLabel(nameEn, nameYue)}
       tabIndex={0}
       onKeyDown={onKeyDown}
     >
@@ -95,30 +96,39 @@ export function CutCarousel({
           Synthetic ref <span lang="zh-HK">合成參考</span>
         </p>
         {reduce ? (
-          <Image
-            src={frame.image}
-            alt=""
-            width={360}
-            height={480}
-            unoptimized
-            className="cut-photo"
-            draggable={false}
-            onPointerDown={onPointerDown}
-            onPointerUp={onPointerUp}
-          />
+          <div role="group" aria-roledescription="slide" aria-label={slideAnnouncement(index, frames.length, frame.angle)}>
+            <Image
+              src={frame.image}
+              alt=""
+              width={360}
+              height={480}
+              unoptimized
+              className="cut-photo"
+              draggable={false}
+              onPointerDown={onPointerDown}
+              onPointerUp={onPointerUp}
+            />
+          </div>
         ) : (
-          <div ref={scroller} className="orbit-scroller" onScroll={onScroll}>
-            {frames.map((item) => (
-              <Image
+          <div ref={scroller} className="orbit-scroller" onScroll={onScroll} tabIndex={-1}>
+            {frames.map((item, dot) => (
+              <div
                 key={item.angle}
-                src={item.image}
-                alt=""
-                width={360}
-                height={480}
-                unoptimized
-                className="cut-photo"
-                draggable={false}
-              />
+                role="group"
+                aria-roledescription="slide"
+                aria-label={slideAnnouncement(dot, frames.length, item.angle)}
+                aria-hidden={dot === index ? undefined : true}
+              >
+                <Image
+                  src={item.image}
+                  alt=""
+                  width={360}
+                  height={480}
+                  unoptimized
+                  className="cut-photo"
+                  draggable={false}
+                />
+              </div>
             ))}
           </div>
         )}

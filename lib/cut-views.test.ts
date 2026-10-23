@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { ANGLE_ORDER, cutView, listCutViews, slideAnnouncement, stepAngle } from "./cut-views";
+import { ANGLE_ORDER, carouselLabel, cutView, listCutViews, slideAnnouncement, stepAngle } from "./cut-views";
 
 const DEMO = ["crop-fade", "french-crop", "two-block"] as const;
 const OFF_DEMO = ["side-part", "curtain", "undercut", "pompadour", "induction"] as const;
@@ -84,5 +84,11 @@ describe("carousel steps", () => {
   it("announces the slide in English and Cantonese", () => {
     expect(slideAnnouncement(1, 4, "side")).toBe("2 of 4, Side 側面");
     expect(slideAnnouncement(0, 4, "front")).toBe("1 of 4, Front 正面");
+  });
+
+  it("names the carousel in English and Cantonese, including the synthetic warning", () => {
+    expect(carouselLabel("French crop", "法式碎蓋")).toBe(
+      "French crop 法式碎蓋. Synthetic reference 合成參考. Not a customer photo 唔係客人相.",
+    );
   });
 });
