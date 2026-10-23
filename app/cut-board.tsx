@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { listCutViews } from "@/lib/cut-views";
 import { usePrefs } from "@/lib/use-prefs";
 import { CutCarousel } from "./cut-carousel";
@@ -11,14 +11,23 @@ export function CutBoard() {
   const views = listCutViews();
   const [openId, setOpenId] = useState<string | null>(null);
   const open = views.find((view) => view.id === openId && view.orbit) ?? null;
+  const openers = useRef(new Map<string, HTMLButtonElement>());
+
+  const closeCarousel = useCallback(() => {
+    setOpenId((current) => {
+      const opener = current ? openers.current.get(current) : undefined;
+      if (opener) requestAnimationFrame(() => opener.focus());
+      return null;
+    });
+  }, []);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
-      if (event.key === "Escape") setOpenId(null);
+      if (event.key === "Escape") closeCarousel();
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [closeCarousel]);
 
   return (
     <section aria-labelledby="cut-catalog">
@@ -31,7 +40,7 @@ export function CutBoard() {
           frames={open.frames}
           nameEn={open.nameEn}
           nameYue={open.nameYue}
-          onClose={() => setOpenId(null)}
+          onClose={closeCarousel}
         />
       ) : null}
       <ul className="cut-grid">
@@ -82,6 +91,11 @@ export function CutBoard() {
                 type="button"
                 className={className}
                 aria-expanded={opened}
+                aria-controls={opened ? "cut-orbit" : undefined}
+                ref={(node) => {
+                  if (node) openers.current.set(view.id, node);
+                  else openers.current.delete(view.id);
+                }}
                 onClick={() => setOpenId(opened ? null : view.id)}
               >
                 {photo}

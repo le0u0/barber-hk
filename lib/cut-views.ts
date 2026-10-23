@@ -85,3 +85,7 @@ export function slideAnnouncement(index: number, count: number, angle: CutAngle)
   const label = ANGLE_LABEL[angle];
   return `${index + 1} of ${count}, ${label.en} ${label.yue}`;
 }
+
+export function carouselLabel(nameEn: string, nameYue: string): string {
+  return `${nameEn} ${nameYue}. Synthetic reference 合成參考. Not a customer photo 唔係客人相.`;
+}
