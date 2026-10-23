@@ -2,9 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useSyncExternalStore } from "react";
-import { BRIEF_KEY } from "@/lib/prefs";
-import type { BriefCopy, BriefResponse } from "@/lib/types";
+import { useState, useSyncExternalStore } from "react";
+import { resolveStoredBrief } from "@/lib/brief-resume";
+import { formatBriefText } from "@/lib/brief-text";
+import { cutView } from "@/lib/cut-views";
+import { cutDisplayName } from "@/lib/cut-name";
+import { CutCarousel } from "../cut-carousel";
+import { BRIEF_EVENT, readBriefRaw } from "@/lib/prefs";
+import { usePrefs } from "@/lib/use-prefs";
+import type { BriefCopy } from "@/lib/types";
 
 const LABELS = {
   en: [
@@ -23,83 +29,160 @@ const LABELS = {
   ],
 } as const;
 
-function CopyBlock({ lang, title, copy }: { lang: "en" | "yue"; title: string; copy: BriefCopy }) {
-  return (
-    <section lang={lang === "yue" ? "zh-HK" : "en"} className="border border-stone-300 bg-white p-3">
-      <h2 className="font-semibold">{title}</h2>
-      {LABELS[lang].map(([key, label]) => (
-        <p key={key} className="mt-2 text-sm">
-          <span className="font-medium">{label}. </span>
-          {copy[key]}
-        </p>
-      ))}
-    </section>
+const COPY = {
+  en: {
+    emptyTitle: "No brief yet",
+    emptyBody: "Take the quiz or send a selfie.",
+    quiz: "Quiz",
+    selfie: "Selfie",
+    copyEn: "Copy English",
+    copyYue: "Copy 粵語",
+    share: "Share both",
+    copied: "Copied",
+    copyFail: "Could not copy",
+    note: "East Asian hair note",
+  },
+  yue: {
+    emptyTitle: "未有備忘",
+    emptyBody: "先做問卷或者自拍。",
+    quiz: "問卷",
+    selfie: "自拍",
+    copyEn: "複製英文",
+    copyYue: "複製粵語",
+    share: "一齊分享",
+    copied: "已複製",
+    copyFail: "複製唔到",
+    note: "東亞髮質（英文）",
+  },
+} as const;
+
+function subscribe(onStoreChange: () => void) {
+  window.addEventListener(BRIEF_EVENT, onStoreChange);
+  window.addEventListener("storage", onStoreChange);
+  return () => {
+    window.removeEventListener(BRIEF_EVENT, onStoreChange);
+    window.removeEventListener("storage", onStoreChange);
+  };
+}
+
+function useClientReady() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
   );
 }
 
-function subscribe() {
-  return () => {};
-}
-
-function readBrief() {
-  return sessionStorage.getItem(BRIEF_KEY);
-}
-
 export default function BriefPage() {
-  const raw = useSyncExternalStore(subscribe, readBrief, () => null);
-  let brief: BriefResponse | null = null;
-  if (raw) {
+  const ready = useClientReady();
+  const raw = useSyncExternalStore(subscribe, readBriefRaw, () => null);
+  const prefs = usePrefs();
+  const yue = prefs.lang === "yue";
+  const copy = yue ? COPY.yue : COPY.en;
+  const lang = yue ? "yue" : "en";
+  const brief = resolveStoredBrief(raw, prefs.lastCutId);
+  const [status, setStatus] = useState("");
+
+  if (!ready) {
+    return <main className="mx-auto min-h-[40vh] w-full max-w-xl px-4 py-6" />;
+  }
+
+  async function write(text: string) {
     try {
-      brief = JSON.parse(raw) as BriefResponse;
+      await navigator.clipboard.writeText(text);
+      setStatus(copy.copied);
     } catch {
-      brief = null;
+      setStatus(copy.copyFail);
     }
+  }
+
+  async function share() {
+    if (!brief) return;
+    const text = formatBriefText(brief, "both");
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share({ title: cutDisplayName(brief.cut, lang), text });
+        return;
+      } catch (error) {
+        if (error instanceof Error && error.name === "AbortError") return;
+      }
+    }
+    await write(text);
   }
 
   if (!brief?.brief) {
     return (
-      <main className="mx-auto flex max-w-xl flex-col gap-3 px-4 py-6">
-        <h1 className="text-2xl font-semibold">No brief yet</h1>
-        <p lang="zh-HK">未有備忘。先做問卷或者自拍。</p>
-        <Link href="/quiz" className="underline">
-          Quiz 問卷
-        </Link>
-        <Link href="/selfie" className="underline">
-          Selfie 自拍
-        </Link>
+      <main className="page-form">
+        <h1 className="hero-title">{copy.emptyTitle}</h1>
+        <p className="hero-yue">{copy.emptyBody}</p>
+        <div className="cta-row">
+          <Link href="/quiz" className="cta cta-yellow">
+            Quiz <span lang="zh-HK">問卷</span>
+          </Link>
+          <Link href="/selfie" className="cta cta-ink">
+            Selfie <span lang="zh-HK">自拍</span>
+          </Link>
+        </div>
       </main>
     );
   }
 
+  const order = yue ? (["yue", "en"] as const) : (["en", "yue"] as const);
+  const view = cutView(brief.cut.id);
+
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-6">
-      <p className="text-xs uppercase tracking-wide text-stone-600">
-        {brief.source === "gemini" ? "Gemini" : "Static fallback"}
-        {brief.fallbackReason ? ` (${brief.fallbackReason})` : ""}
-      </p>
+    <main className="page-form" lang={yue ? "zh-HK" : "en"}>
+      {view && view.orbit ? (
+        <CutCarousel frames={view.frames} nameEn={view.nameEn} nameYue={view.nameYue} />
+      ) : (
+        <div className="flex items-center gap-3">
+          <Image src={brief.cut.image} alt="" width={96} height={128} unoptimized className="cut-photo" style={{ width: 96 }} />
+          <div>
+            <h1 className="hero-title">{cutDisplayName(brief.cut, lang)}</h1>
+            <p className="hero-yue" lang={yue ? "en" : "zh-HK"}>
+              {cutDisplayName(brief.cut, yue ? "en" : "yue")}
+            </p>
+          </div>
+        </div>
+      )}
       {brief.notice ? (
-        <div className="border border-amber-700 bg-amber-50 p-3 text-sm" role="status">
-          <p>{brief.notice.en}</p>
-          <p lang="zh-HK">{brief.notice.yue}</p>
+        <div className="alert" role="status">
+          <p>{yue ? brief.notice.yue : brief.notice.en}</p>
+          <p lang={yue ? "en" : "zh-HK"}>{yue ? brief.notice.en : brief.notice.yue}</p>
         </div>
       ) : null}
-      <div className="flex items-end gap-3">
-        <Image src={brief.cut.image} alt="" width={96} height={128} unoptimized />
-        <div>
-          <h1 className="text-2xl font-semibold">{brief.cut.nameEn}</h1>
-          <p lang="zh-HK" className="text-lg">
-            {brief.cut.nameYue}
-          </p>
-          <p className="text-xs text-stone-600">
-            <code>{brief.cut.id}</code>
-          </p>
-        </div>
+      <div className="cta-row">
+        <button type="button" className="cta cta-yellow" onClick={() => write(formatBriefText(brief, "en"))}>
+          {copy.copyEn}
+        </button>
+        <button type="button" className="cta cta-yellow" onClick={() => write(formatBriefText(brief, "yue"))}>
+          {copy.copyYue}
+        </button>
+        <button type="button" className="cta cta-ink" style={{ gridColumn: "1 / -1" }} onClick={share}>
+          {copy.share}
+        </button>
       </div>
-      <CopyBlock lang="en" title="English" copy={brief.brief.en} />
-      <CopyBlock lang="yue" title="粵語" copy={brief.brief.yue} />
-      <section className="text-sm">
-        <h2 className="font-semibold">East Asian hair note</h2>
-        <p className="mt-1">{brief.cut.eastAsianNote}</p>
+      {status ? (
+        <p role="status" className="ok">
+          {status}
+        </p>
+      ) : null}
+      <div className="brief-langs">
+        {order.map((code) => (
+          <article key={code} className="brief-card" lang={code === "yue" ? "zh-HK" : "en"}>
+            <h2 className="font-bold">{code === "yue" ? "粵語" : "English"}</h2>
+            {LABELS[code].map(([key, label]) => (
+              <p key={key} className={key === "ask" ? "text-xl font-medium leading-snug" : undefined}>
+                <span className="font-semibold">{label}. </span>
+                {brief.brief[code][key as keyof BriefCopy]}
+              </p>
+            ))}
+          </article>
+        ))}
+      </div>
+      <section className="note">
+        <h2 className="font-semibold">{copy.note}</h2>
+        <p lang="en">{brief.cut.eastAsianNote}</p>
       </section>
     </main>
   );

@@ -2,57 +2,83 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { BRIEF_KEY, isQuiz, savePrefs } from "@/lib/prefs";
+import { isQuiz, saveBrief, savePrefs } from "@/lib/prefs";
 import { usePrefs } from "@/lib/use-prefs";
 import type { BriefResponse, QuizAnswers } from "@/lib/types";
 
 const QUESTIONS: Array<{
   key: keyof QuizAnswers;
-  legend: string;
-  options: Array<[QuizAnswers[keyof QuizAnswers], string]>;
+  en: string;
+  yue: string;
+  options: Array<{ value: QuizAnswers[keyof QuizAnswers]; en: string; yue: string }>;
 }> = [
   {
     key: "sides",
-    legend: "Sides 兩側",
+    en: "Sides",
+    yue: "兩側",
     options: [
-      ["skin", "Skin fade 皮膚漸變"],
-      ["taper", "Taper 短漸變"],
-      ["scissor", "Scissor 用剪"],
+      { value: "skin", en: "Skin fade", yue: "皮膚漸變" },
+      { value: "taper", en: "Taper", yue: "短漸變" },
+      { value: "scissor", en: "Scissor", yue: "用剪" },
     ],
   },
   {
     key: "top",
-    legend: "Top 頂",
+    en: "Top",
+    yue: "頂",
     options: [
-      ["buzz", "Buzz 全短"],
-      ["short", "Short 短"],
-      ["medium", "Medium 中"],
-      ["long", "Long 長"],
+      { value: "buzz", en: "Buzz", yue: "全短" },
+      { value: "short", en: "Short", yue: "短" },
+      { value: "medium", en: "Medium", yue: "中" },
+      { value: "long", en: "Long", yue: "長" },
     ],
   },
   {
     key: "finish",
-    legend: "Finish 造型",
+    en: "Finish",
+    yue: "造型",
     options: [
-      ["textured", "Textured 抓碎"],
-      ["sleek", "Sleek 貼服"],
-      ["natural", "Natural 自然"],
+      { value: "textured", en: "Textured", yue: "抓碎" },
+      { value: "sleek", en: "Sleek", yue: "貼服" },
+      { value: "natural", en: "Natural", yue: "自然" },
     ],
   },
   {
     key: "part",
-    legend: "Part 分線",
+    en: "Part",
+    yue: "分線",
     options: [
-      ["none", "None 不分"],
-      ["side", "Side 側分"],
-      ["middle", "Middle 中分"],
+      { value: "none", en: "None", yue: "不分" },
+      { value: "side", en: "Side", yue: "側分" },
+      { value: "middle", en: "Middle", yue: "中分" },
     ],
   },
 ];
 
+const COPY = {
+  en: {
+    title: "Quiz",
+    other: "問卷",
+    incomplete: "Pick all four. 四題都要揀",
+    fail: "Could not make a brief.",
+    pending: "Making the brief…",
+    submit: "Show brief",
+  },
+  yue: {
+    title: "問卷",
+    other: "Quiz",
+    incomplete: "四題都要揀。Pick all four.",
+    fail: "出唔到備忘。",
+    pending: "寫緊備忘…",
+    submit: "出備忘",
+  },
+} as const;
+
 export default function QuizPage() {
   const router = useRouter();
   const prefs = usePrefs();
+  const yue = prefs.lang === "yue";
+  const copy = yue ? COPY.yue : COPY.en;
   const [draft, setDraft] = useState<Partial<QuizAnswers> | null>(null);
   const answers = draft ?? prefs.quiz ?? {};
   const [error, setError] = useState("");
@@ -61,7 +87,7 @@ export default function QuizPage() {
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     if (!isQuiz(answers)) {
-      setError("Answer every question. 請答完四條。");
+      setError(copy.incomplete);
       return;
     }
     setPending(true);
@@ -74,53 +100,75 @@ export default function QuizPage() {
       });
       const data = (await response.json()) as BriefResponse & { error?: string };
       if (!response.ok || !data.brief) {
-        throw new Error(data.error || "Could not make a brief.");
+        throw new Error(data.error || copy.fail);
       }
       savePrefs({ ...prefs, quiz: answers, lastCutId: data.cut.id });
-      sessionStorage.setItem(BRIEF_KEY, JSON.stringify(data));
+      saveBrief(data);
       router.push("/brief");
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Could not make a brief.");
+      setError(caught instanceof Error ? caught.message : copy.fail);
       setPending(false);
     }
   }
 
+  const lead = yue ? "yue" : "en";
+
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-6">
-      <h1 className="text-2xl font-semibold">Quiz 問卷</h1>
-      <form className="flex flex-col gap-4" onSubmit={onSubmit}>
+    <main className="page-form">
+      <h1 className="hero-title">
+        {copy.title} <span lang={yue ? "en" : "zh-HK"}>{copy.other}</span>
+      </h1>
+      <p className="hero-yue">
+        {yue ? "答四題出備忘" : "Answer four questions"}{" "}
+        <span lang={yue ? "en" : "zh-HK"}>{yue ? "Answer four questions" : "答四題出備忘"}</span>
+      </p>
+      <form className="mt-6 flex flex-col gap-6" lang={yue ? "zh-HK" : "en"} onSubmit={onSubmit}>
         {QUESTIONS.map((question) => (
-          <fieldset key={question.key} className="border border-stone-300 p-3">
-            <legend className="px-1 text-sm font-medium">{question.legend}</legend>
-            <div className="flex flex-col gap-1">
-              {question.options.map(([value, label]) => (
-                <label key={value} className="flex items-center gap-2 text-sm">
-                  <input
-                    type="radio"
-                    name={question.key}
-                    value={value}
-                    checked={answers[question.key] === value}
-                    onChange={() =>
-                      setDraft((current) => ({
-                        ...(current ?? prefs.quiz ?? {}),
-                        [question.key]: value,
-                      }))
-                    }
-                    required
-                  />
-                  {label}
-                </label>
-              ))}
-            </div>
+          <fieldset key={question.key} className="flex flex-col gap-2">
+            <legend className="mb-1 font-bold">
+              {lead === "yue" ? question.yue : question.en}{" "}
+              <span className="pair-rest" lang={lead === "yue" ? "en" : "zh-HK"}>
+                {lead === "yue" ? question.en : question.yue}
+              </span>
+            </legend>
+            {question.options.map((option) => (
+              <label key={option.value} className="option-row">
+                <input
+                  className="size-5 shrink-0"
+                  type="radio"
+                  name={question.key}
+                  value={option.value}
+                  checked={answers[question.key] === option.value}
+                  onChange={() =>
+                    setDraft((current) => ({
+                      ...(current ?? prefs.quiz ?? {}),
+                      [question.key]: option.value,
+                    }))
+                  }
+                />
+                <span className="font-bold">{lead === "yue" ? option.yue : option.en}</span>{" "}
+                <span className="pair-rest" lang={lead === "yue" ? "en" : "zh-HK"}>
+                  {lead === "yue" ? option.en : option.yue}
+                </span>
+              </label>
+            ))}
           </fieldset>
         ))}
         {error ? (
-          <p role="alert" className="text-sm text-red-800">
+          <p role="alert" className="alert">
             {error}
           </p>
         ) : null}
-        <button type="submit" className="border border-stone-900 px-3 py-2 disabled:opacity-50" disabled={pending}>
-          {pending ? "Making brief…" : "Show brief 出備忘"}
+        <button type="submit" className="cta cta-yellow" disabled={pending} aria-disabled={pending}>
+          {pending ? (
+            <>
+              Building brief… <span lang="zh-HK">整緊備忘…</span>
+            </>
+          ) : (
+            <>
+              Show brief <span lang="zh-HK">出備忘</span>
+            </>
+          )}
         </button>
       </form>
     </main>

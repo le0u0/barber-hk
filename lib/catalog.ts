@@ -53,6 +53,29 @@ export function getCut(id: string): Cut | undefined {
   return cuts.find((cut) => cut.id === id);
 }
 
+export type CutCard = {
+  id: string;
+  nameEn: string;
+  nameYue: string;
+  image: string;
+};
+
+export function listCutCards(): CutCard[] {
+  return cuts.map((cut) => ({
+    id: cut.id,
+    nameEn: cut.nameEn,
+    nameYue: cut.nameYue,
+    image: cut.image,
+  }));
+}
+
+export function cutCard(id: string | null | undefined): CutCard | null {
+  if (!id) return null;
+  const cut = getCut(id);
+  if (!cut) return null;
+  return { id: cut.id, nameEn: cut.nameEn, nameYue: cut.nameYue, image: cut.image };
+}
+
 export function matchCut(answers: QuizAnswers): Cut {
   const id = matchId(answers);
   const cut = getCut(id);

@@ -1,40 +1,40 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { savePrefs } from "@/lib/prefs";
 import { usePrefs } from "@/lib/use-prefs";
 
 export function Header() {
   const prefs = usePrefs();
-  const lang = prefs.lang;
+  const yue = prefs.lang === "yue";
+  const path = usePathname();
 
   function toggleLang() {
-    savePrefs({ ...prefs, lang: lang === "en" ? "yue" : "en" });
+    savePrefs({ ...prefs, lang: yue ? "en" : "yue" });
   }
 
   return (
-    <header className="flex items-center justify-between gap-3 px-4 py-3">
-      <Link href="/" className="font-semibold tracking-tight">
+    <header className="site-header">
+      <Link href="/" className="logo-mark">
         Barber HK
       </Link>
-      <nav className="flex items-center gap-3 text-sm">
-        <Link href="/quiz">{lang === "yue" ? "問卷" : "Quiz"}</Link>
-        <Link href="/selfie">{lang === "yue" ? "自拍" : "Selfie"}</Link>
-        <button type="button" className="border px-2 py-1" onClick={toggleLang}>
-          {lang === "yue" ? "EN" : "粵"}
+      <nav className="flex items-center">
+        <Link href="/quiz" className={path === "/quiz" ? "nav-link is-active" : "nav-link"}>
+          Quiz
+        </Link>
+        <Link href="/selfie" className={path === "/selfie" ? "nav-link is-active" : "nav-link"}>
+          Selfie
+        </Link>
+        <button
+          type="button"
+          className="lang-chip"
+          aria-label={yue ? "Show English" : "顯示粵語"}
+          onClick={toggleLang}
+        >
+          {yue ? "EN" : "粵"}
         </button>
       </nav>
     </header>
-  );
-}
-
-export function LastPick() {
-  const id = usePrefs().lastCutId;
-  if (!id) return null;
-
-  return (
-    <p className="text-sm text-stone-700">
-      Last pick <span lang="zh-HK">上次</span>: <code>{id}</code>
-    </p>
   );
 }
