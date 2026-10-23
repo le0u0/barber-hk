@@ -19,9 +19,9 @@ A cut gets that carousel only when `docs/angles/MANIFEST.json` marks all four an
 | Textured crop fade | front, three-quarter, side, back |
 | French crop | front, three-quarter, side, back |
 | Two-block | front, three-quarter, side, back |
-| Office side part, Curtain middle part, Slick undercut, Short pompadour, Induction buzz | front only, labeled “Front only 只有正面” |
+| Office side part, Curtain middle part, Slick undercut, Short pompadour, Induction buzz | front only (`/mtr-assets/angles/{cutId}/front.jpg`), labeled “Front only 只有正面” and “Synthetic ref 合成參考” |
 
-Front-only cards do not open a carousel and do not reuse one photo as fake side or back frames.
+Front-only cards do not open a carousel and do not reuse one photo as fake side or back frames. Their other angles stay `off-demo-path`.
 
 ## Carousel
 

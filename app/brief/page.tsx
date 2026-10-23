@@ -136,12 +136,30 @@ export default function BriefPage() {
         <CutCarousel frames={view.frames} nameEn={view.nameEn} nameYue={view.nameYue} />
       ) : (
         <div className="flex items-center gap-3">
-          <Image src={brief.cut.image} alt="" width={96} height={128} unoptimized className="cut-photo" style={{ width: 96 }} />
+          <Image
+            src={view?.frames[0]?.image ?? brief.cut.image}
+            alt=""
+            width={96}
+            height={128}
+            unoptimized
+            className="cut-photo"
+            style={{ width: 96 }}
+          />
           <div>
             <h1 className="hero-title">{cutDisplayName(brief.cut, lang)}</h1>
             <p className="hero-yue" lang={yue ? "en" : "zh-HK"}>
               {cutDisplayName(brief.cut, yue ? "en" : "yue")}
             </p>
+            {view && !view.orbit ? (
+              <p className="front-only" style={{ padding: 0 }}>
+                <span>
+                  Front only <span lang="zh-HK">只有正面</span>
+                </span>
+                <span>
+                  Synthetic ref <span lang="zh-HK">合成參考</span>
+                </span>
+              </p>
+            ) : null}
           </div>
         </div>
       )}

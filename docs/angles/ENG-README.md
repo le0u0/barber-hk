@@ -4,6 +4,6 @@
 2. Swipe / prev-next: front → three-quarter → side → back (same face crop).
 3. Demo path (wire now): `two-block`, `crop-fade`, `french-crop`.
 4. Path: `mtr-assets/angles/{cutId}/{angle}.jpg` — see `MANIFEST.json` (`status: generated`).
-5. Other cuts: front-only or hide angle chrome until assets exist (`status: off-demo-path`).
+5. Other cuts: `front.jpg` only (`status: generated`, `source: front-only synthetic`). The other angles stay `off-demo-path`. No swipe chrome until every angle is `generated`.
 6. Tokens: `../TOKENS.md`. Comp: `../../mtr-cut-carousel.jpg`.
 7. Synthetic refs — swap for real shoot later. No face morph.

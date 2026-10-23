@@ -99,140 +99,160 @@
     "cutId": "side-part",
     "angle": "front",
     "path": "mtr-assets/angles/side-part/front.jpg",
-    "status": "off-demo-path",
-    "source": null
+    "status": "generated",
+    "source": "front-only synthetic",
+    "hash12": "23fd5d7215b8"
   },
   {
     "cutId": "side-part",
     "angle": "three-quarter",
     "path": "mtr-assets/angles/side-part/three-quarter.jpg",
     "status": "off-demo-path",
-    "source": null
+    "source": null,
+    "hash12": null
   },
   {
     "cutId": "side-part",
     "angle": "side",
     "path": "mtr-assets/angles/side-part/side.jpg",
     "status": "off-demo-path",
-    "source": null
+    "source": null,
+    "hash12": null
   },
   {
     "cutId": "side-part",
     "angle": "back",
     "path": "mtr-assets/angles/side-part/back.jpg",
     "status": "off-demo-path",
-    "source": null
+    "source": null,
+    "hash12": null
   },
   {
     "cutId": "curtain",
     "angle": "front",
     "path": "mtr-assets/angles/curtain/front.jpg",
-    "status": "off-demo-path",
-    "source": null
+    "status": "generated",
+    "source": "front-only synthetic",
+    "hash12": "944073958bcd"
   },
   {
     "cutId": "curtain",
     "angle": "three-quarter",
     "path": "mtr-assets/angles/curtain/three-quarter.jpg",
     "status": "off-demo-path",
-    "source": null
+    "source": null,
+    "hash12": null
   },
   {
     "cutId": "curtain",
     "angle": "side",
     "path": "mtr-assets/angles/curtain/side.jpg",
     "status": "off-demo-path",
-    "source": null
+    "source": null,
+    "hash12": null
   },
   {
     "cutId": "curtain",
     "angle": "back",
     "path": "mtr-assets/angles/curtain/back.jpg",
     "status": "off-demo-path",
-    "source": null
+    "source": null,
+    "hash12": null
   },
   {
     "cutId": "undercut",
     "angle": "front",
     "path": "mtr-assets/angles/undercut/front.jpg",
-    "status": "off-demo-path",
-    "source": null
+    "status": "generated",
+    "source": "front-only synthetic",
+    "hash12": "3bd1352a1622"
   },
   {
     "cutId": "undercut",
     "angle": "three-quarter",
     "path": "mtr-assets/angles/undercut/three-quarter.jpg",
     "status": "off-demo-path",
-    "source": null
+    "source": null,
+    "hash12": null
   },
   {
     "cutId": "undercut",
     "angle": "side",
     "path": "mtr-assets/angles/undercut/side.jpg",
     "status": "off-demo-path",
-    "source": null
+    "source": null,
+    "hash12": null
   },
   {
     "cutId": "undercut",
     "angle": "back",
     "path": "mtr-assets/angles/undercut/back.jpg",
     "status": "off-demo-path",
-    "source": null
+    "source": null,
+    "hash12": null
   },
   {
     "cutId": "pompadour",
     "angle": "front",
     "path": "mtr-assets/angles/pompadour/front.jpg",
-    "status": "off-demo-path",
-    "source": null
+    "status": "generated",
+    "source": "front-only synthetic",
+    "hash12": "462e8521da00"
   },
   {
     "cutId": "pompadour",
     "angle": "three-quarter",
     "path": "mtr-assets/angles/pompadour/three-quarter.jpg",
     "status": "off-demo-path",
-    "source": null
+    "source": null,
+    "hash12": null
   },
   {
     "cutId": "pompadour",
     "angle": "side",
     "path": "mtr-assets/angles/pompadour/side.jpg",
     "status": "off-demo-path",
-    "source": null
+    "source": null,
+    "hash12": null
   },
   {
     "cutId": "pompadour",
     "angle": "back",
     "path": "mtr-assets/angles/pompadour/back.jpg",
     "status": "off-demo-path",
-    "source": null
+    "source": null,
+    "hash12": null
   },
   {
     "cutId": "induction",
     "angle": "front",
     "path": "mtr-assets/angles/induction/front.jpg",
-    "status": "off-demo-path",
-    "source": null
+    "status": "generated",
+    "source": "front-only synthetic",
+    "hash12": "f1cf4c78e362"
   },
   {
     "cutId": "induction",
     "angle": "three-quarter",
     "path": "mtr-assets/angles/induction/three-quarter.jpg",
     "status": "off-demo-path",
-    "source": null
+    "source": null,
+    "hash12": null
   },
   {
     "cutId": "induction",
     "angle": "side",
     "path": "mtr-assets/angles/induction/side.jpg",
     "status": "off-demo-path",
-    "source": null
+    "source": null,
+    "hash12": null
   },
   {
     "cutId": "induction",
     "angle": "back",
     "path": "mtr-assets/angles/induction/back.jpg",
     "status": "off-demo-path",
-    "source": null
+    "source": null,
+    "hash12": null
   }
 ]

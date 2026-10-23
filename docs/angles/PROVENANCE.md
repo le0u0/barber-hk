@@ -1,6 +1,6 @@
 # Angle pack provenance — demo path freeze
 
-Rule: **3 cuts × real 4 angles** > 8× fake stubs. Other five off demo path until real angles land.
+Rule: **3 cuts × 4 angles** for the carousel. The other five ship a front still until a real orbit lands.
 
 Synthetic = AI reference, not customer photos. Same-face lock per cut across angles. Replace with real shoot when available.
 
@@ -12,9 +12,19 @@ Synthetic = AI reference, not customer photos. Same-face lock per cut across ang
 | crop-fade | same 4 + `strip-4.jpg` | generated | Eng may use strip or panels |
 | french-crop | same 4 + `strip-4.jpg` | generated | Eng may use strip or panels |
 
-## Off demo path
+## Front-only (home grid — not a carousel)
 
-side-part · curtain · undercut · pompadour · induction — folder + README only. Hidden from demo carousel.
+side-part · curtain · undercut · pompadour · induction each ship `front.jpg` only. The file is a synthetic reference, not a customer photo and not a face morph.
+
+| cutId | file | status | source |
+|-------|------|--------|--------|
+| side-part | `front.jpg` | generated | front-only synthetic |
+| curtain | `front.jpg` | generated | front-only synthetic |
+| undercut | `front.jpg` | generated | front-only synthetic |
+| pompadour | `front.jpg` | generated | front-only synthetic |
+| induction | `front.jpg` | generated | front-only synthetic |
+
+`three-quarter`, `side`, and `back` stay `off-demo-path` with no file. A cut opens swipe chrome only when every angle is `generated`, so these five stay labeled “Front only 只有正面” and “Synthetic ref 合成參考”.
 
 ## Path pattern
 
