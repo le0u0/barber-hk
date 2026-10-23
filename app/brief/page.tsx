@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useState, useSyncExternalStore } from "react";
 import { resolveStoredBrief } from "@/lib/brief-resume";
 import { formatBriefText } from "@/lib/brief-text";
+import { cutView } from "@/lib/cut-views";
 import { cutDisplayName } from "@/lib/cut-name";
+import { CutCarousel } from "../cut-carousel";
 import { BRIEF_EVENT, readBriefRaw } from "@/lib/prefs";
 import { usePrefs } from "@/lib/use-prefs";
 import type { BriefCopy } from "@/lib/types";
@@ -110,73 +112,77 @@ export default function BriefPage() {
 
   if (!brief?.brief) {
     return (
-      <main className="mx-auto flex max-w-xl flex-col gap-3 px-4 py-6">
-        <h1 className="text-2xl font-semibold">{copy.emptyTitle}</h1>
-        <p>{copy.emptyBody}</p>
-        <Link href="/quiz" className="inline-flex min-h-[44px] items-center underline">
-          {copy.quiz}
-        </Link>
-        <Link href="/selfie" className="inline-flex min-h-[44px] items-center underline">
-          {copy.selfie}
-        </Link>
+      <main className="page-form">
+        <h1 className="hero-title">{copy.emptyTitle}</h1>
+        <p className="hero-yue">{copy.emptyBody}</p>
+        <div className="cta-row">
+          <Link href="/quiz" className="cta cta-yellow">
+            Quiz <span lang="zh-HK">問卷</span>
+          </Link>
+          <Link href="/selfie" className="cta cta-ink">
+            Selfie <span lang="zh-HK">自拍</span>
+          </Link>
+        </div>
       </main>
     );
   }
 
-  const shown = brief.brief[lang];
+  const order = yue ? (["yue", "en"] as const) : (["en", "yue"] as const);
+  const view = cutView(brief.cut.id);
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-6" lang={yue ? "zh-HK" : "en"}>
-      <div className="flex items-center gap-3">
-        <Image
-          src={brief.cut.image}
-          alt=""
-          width={96}
-          height={128}
-          unoptimized
-          className="h-28 w-[84px] object-cover object-top"
-        />
-        <div>
-          <h1 className="text-3xl font-semibold leading-tight">{cutDisplayName(brief.cut, lang)}</h1>
-          <p lang={yue ? "en" : "zh-HK"} className="text-lg">
-            {cutDisplayName(brief.cut, yue ? "en" : "yue")}
-          </p>
+    <main className="page-form" lang={yue ? "zh-HK" : "en"}>
+      {view && view.orbit ? (
+        <CutCarousel frames={view.frames} nameEn={view.nameEn} nameYue={view.nameYue} />
+      ) : (
+        <div className="flex items-center gap-3">
+          <Image src={brief.cut.image} alt="" width={96} height={128} unoptimized className="cut-photo" style={{ width: 96 }} />
+          <div>
+            <h1 className="hero-title">{cutDisplayName(brief.cut, lang)}</h1>
+            <p className="hero-yue" lang={yue ? "en" : "zh-HK"}>
+              {cutDisplayName(brief.cut, yue ? "en" : "yue")}
+            </p>
+          </div>
         </div>
-      </div>
+      )}
       {brief.notice ? (
-        <div className="border border-amber-700 bg-amber-50 p-3 text-sm" role="status">
+        <div className="alert" role="status">
           <p>{yue ? brief.notice.yue : brief.notice.en}</p>
+          <p lang={yue ? "en" : "zh-HK"}>{yue ? brief.notice.en : brief.notice.yue}</p>
         </div>
       ) : null}
-      <div className="grid grid-cols-2 gap-2">
-        <button type="button" className="min-h-[44px] border border-stone-900 px-3 py-2 text-sm font-medium" onClick={() => write(formatBriefText(brief, "en"))}>
+      <div className="cta-row">
+        <button type="button" className="cta cta-yellow" onClick={() => write(formatBriefText(brief, "en"))}>
           {copy.copyEn}
         </button>
-        <button type="button" className="min-h-[44px] border border-stone-900 px-3 py-2 text-sm font-medium" onClick={() => write(formatBriefText(brief, "yue"))}>
+        <button type="button" className="cta cta-yellow" onClick={() => write(formatBriefText(brief, "yue"))}>
           {copy.copyYue}
         </button>
-        <button type="button" className="col-span-2 min-h-[44px] border border-stone-900 bg-stone-900 px-3 py-2 text-sm font-medium text-white" onClick={share}>
+        <button type="button" className="cta cta-ink" style={{ gridColumn: "1 / -1" }} onClick={share}>
           {copy.share}
         </button>
       </div>
       {status ? (
-        <p role="status" className="text-sm">
+        <p role="status" className="ok">
           {status}
         </p>
       ) : null}
-      <article className="border border-stone-300 bg-white p-4 text-lg leading-relaxed">
-        {LABELS[lang].map(([key, label]) => (
-          <p key={key} className={key === "ask" ? "text-xl font-medium leading-snug" : "mt-3"}>
-            <span className="font-semibold">{label}. </span>
-            {shown[key as keyof BriefCopy]}
-          </p>
+      <div className="brief-langs">
+        {order.map((code) => (
+          <article key={code} className="brief-card" lang={code === "yue" ? "zh-HK" : "en"}>
+            <h2 className="font-bold">{code === "yue" ? "粵語" : "English"}</h2>
+            {LABELS[code].map(([key, label]) => (
+              <p key={key} className={key === "ask" ? "text-xl font-medium leading-snug" : undefined}>
+                <span className="font-semibold">{label}. </span>
+                {brief.brief[code][key as keyof BriefCopy]}
+              </p>
+            ))}
+          </article>
         ))}
-      </article>
-      <section className="text-sm leading-relaxed">
+      </div>
+      <section className="note">
         <h2 className="font-semibold">{copy.note}</h2>
-        <p className="mt-1" lang="en">
-          {brief.cut.eastAsianNote}
-        </p>
+        <p lang="en">{brief.cut.eastAsianNote}</p>
       </section>
     </main>
   );

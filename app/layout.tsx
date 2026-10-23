@@ -1,14 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Geist } from "next/font/google";
 import { Header } from "./header";
 import { QaStrip } from "./qa-strip";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Barber HK",
@@ -17,13 +11,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
+    <html lang="en" className="h-full">
       <body className="flex min-h-full flex-col">
         <Header />
         <Suspense fallback={null}>
           <QaStrip />
         </Suspense>
         <div className="flex-1">{children}</div>
+        <footer className="site-footer">
+          Photo not stored · <span lang="zh-HK">相片唔會存</span>
+        </footer>
       </body>
     </html>
   );

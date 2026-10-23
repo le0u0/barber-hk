@@ -59,7 +59,7 @@ const COPY = {
   en: {
     title: "Quiz",
     other: "問卷",
-    incomplete: "Answer every question.",
+    incomplete: "Pick all four. 四題都要揀",
     fail: "Could not make a brief.",
     pending: "Making the brief…",
     submit: "Show brief",
@@ -67,7 +67,7 @@ const COPY = {
   yue: {
     title: "問卷",
     other: "Quiz",
-    incomplete: "請答完四條。",
+    incomplete: "四題都要揀。Pick all four.",
     fail: "出唔到備忘。",
     pending: "寫緊備忘…",
     submit: "出備忘",
@@ -111,52 +111,64 @@ export default function QuizPage() {
     }
   }
 
+  const lead = yue ? "yue" : "en";
+
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-6">
-      <div>
-        <h1 className="text-2xl font-semibold">{copy.title}</h1>
-        <p lang={yue ? "en" : "zh-HK"} className="text-sm text-stone-600">
-          {copy.other}
-        </p>
-      </div>
-      <form className="flex flex-col gap-4" lang={yue ? "zh-HK" : "en"} onSubmit={onSubmit}>
+    <main className="page-form">
+      <h1 className="hero-title">
+        {copy.title} <span lang={yue ? "en" : "zh-HK"}>{copy.other}</span>
+      </h1>
+      <p className="hero-yue">
+        {yue ? "答四題出備忘" : "Answer four questions"}{" "}
+        <span lang={yue ? "en" : "zh-HK"}>{yue ? "Answer four questions" : "答四題出備忘"}</span>
+      </p>
+      <form className="mt-6 flex flex-col gap-6" lang={yue ? "zh-HK" : "en"} onSubmit={onSubmit}>
         {QUESTIONS.map((question) => (
-          <fieldset key={question.key} className="border border-stone-300 px-3 py-2">
-            <legend className="px-1 text-base font-medium">{yue ? question.yue : question.en}</legend>
-            <div className="flex flex-col">
-              {question.options.map((option) => (
-                <label key={option.value} className="flex min-h-[44px] cursor-pointer items-center gap-3 text-base">
-                  <input
-                    className="size-5 shrink-0"
-                    type="radio"
-                    name={question.key}
-                    value={option.value}
-                    checked={answers[question.key] === option.value}
-                    onChange={() =>
-                      setDraft((current) => ({
-                        ...(current ?? prefs.quiz ?? {}),
-                        [question.key]: option.value,
-                      }))
-                    }
-                    required
-                  />
-                  {yue ? option.yue : option.en}
-                </label>
-              ))}
-            </div>
+          <fieldset key={question.key} className="flex flex-col gap-2">
+            <legend className="mb-1 font-bold">
+              {lead === "yue" ? question.yue : question.en}{" "}
+              <span className="pair-rest" lang={lead === "yue" ? "en" : "zh-HK"}>
+                {lead === "yue" ? question.en : question.yue}
+              </span>
+            </legend>
+            {question.options.map((option) => (
+              <label key={option.value} className="option-row">
+                <input
+                  className="size-5 shrink-0"
+                  type="radio"
+                  name={question.key}
+                  value={option.value}
+                  checked={answers[question.key] === option.value}
+                  onChange={() =>
+                    setDraft((current) => ({
+                      ...(current ?? prefs.quiz ?? {}),
+                      [question.key]: option.value,
+                    }))
+                  }
+                />
+                <span className="font-bold">{lead === "yue" ? option.yue : option.en}</span>{" "}
+                <span className="pair-rest" lang={lead === "yue" ? "en" : "zh-HK"}>
+                  {lead === "yue" ? option.en : option.yue}
+                </span>
+              </label>
+            ))}
           </fieldset>
         ))}
         {error ? (
-          <p role="alert" className="text-sm text-red-800">
+          <p role="alert" className="alert">
             {error}
           </p>
         ) : null}
-        <button
-          type="submit"
-          className="min-h-12 border border-stone-900 bg-stone-900 px-3 py-2 text-white disabled:opacity-50"
-          disabled={pending}
-        >
-          {pending ? copy.pending : copy.submit}
+        <button type="submit" className="cta cta-yellow" disabled={pending} aria-disabled={pending}>
+          {pending ? (
+            <>
+              Building brief… <span lang="zh-HK">整緊備忘…</span>
+            </>
+          ) : (
+            <>
+              Show brief <span lang="zh-HK">出備忘</span>
+            </>
+          )}
         </button>
       </form>
     </main>

@@ -20,6 +20,7 @@ const COPY = {
     submit: "Read photo",
     sample: "Use a sample photo",
     sampleMissing: "Sample photo is unavailable.",
+    again: "Try another photo.",
   },
   yue: {
     title: "自拍",
@@ -32,6 +33,7 @@ const COPY = {
     submit: "睇相",
     sample: "用示範相",
     sampleMissing: "示範相用唔到。",
+    again: "換張相。",
   },
 } as const;
 
@@ -41,6 +43,8 @@ export default function SelfiePage() {
   const copy = yue ? COPY.yue : COPY.en;
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState("");
 
   async function send(imageBase64: string) {
     const response = await fetch("/api/brief", {
@@ -58,10 +62,16 @@ export default function SelfiePage() {
     router.push("/brief");
   }
 
+  function onFile(next: File | undefined) {
+    setFile(next ?? null);
+    setPreview((current) => {
+      if (current) URL.revokeObjectURL(current);
+      return next ? URL.createObjectURL(next) : "";
+    });
+  }
+
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const input = event.currentTarget.elements.namedItem("photo");
-    const file = input instanceof HTMLInputElement ? input.files?.[0] : undefined;
     if (!file) {
       setError(copy.needPhoto);
       return;
@@ -71,7 +81,7 @@ export default function SelfiePage() {
     try {
       await send(await blobToJpegBase64(file));
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : copy.fail);
+      setError(caught instanceof Error ? `${caught.message} ${copy.again}` : `${copy.fail} ${copy.again}`);
       setPending(false);
     }
   }
@@ -90,35 +100,55 @@ export default function SelfiePage() {
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-6">
-      <div>
-        <h1 className="text-2xl font-semibold">{copy.title}</h1>
-        <p lang={yue ? "en" : "zh-HK"} className="text-sm text-stone-600">
-          {copy.other}
-        </p>
-      </div>
-      <p className="text-sm leading-relaxed">
+    <main className="page-form">
+      <h1 className="hero-title">
+        {copy.title} <span lang={yue ? "en" : "zh-HK"}>{copy.other}</span>
+      </h1>
+      <p className="hero-yue">
         {copy.privacy}
-        <span lang={yue ? "en" : "zh-HK"} className="mt-1 block text-stone-600">
+        <span lang={yue ? "en" : "zh-HK"} className="mt-1 block">
           {yue ? COPY.en.privacy : COPY.yue.privacy}
         </span>
       </p>
-      <form className="flex flex-col gap-3" lang={yue ? "zh-HK" : "en"} onSubmit={onSubmit}>
-        <label className="flex min-h-[44px] flex-col justify-center text-base">
-          {copy.photo}
-          <input className="mt-1 block w-full" name="photo" type="file" accept="image/jpeg,image/png,image/webp" required />
-        </label>
+      <form className="mt-6 flex flex-col gap-3" lang={yue ? "zh-HK" : "en"} onSubmit={onSubmit}>
+        <input
+          className="sr-only"
+          name="photo"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          onChange={(event) => onFile(event.currentTarget.files?.[0])}
+        />
+        <button
+          type="button"
+          className="cta cta-ink"
+          onClick={(event) => {
+            const input = event.currentTarget.form?.elements.namedItem("photo");
+            if (input instanceof HTMLInputElement) input.click();
+          }}
+        >
+          {yue ? "揀相" : "Choose photo"} <span lang={yue ? "en" : "zh-HK"}>{yue ? "Choose photo" : "揀相"}</span>
+        </button>
+        {file ? <p className="note">{file.name}</p> : null}
+        {preview ? (
+          // Blob preview from the file the visitor just picked.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={preview} alt="" width={120} height={160} className="cut-photo" style={{ width: 120 }} />
+        ) : null}
         {error ? (
-          <p role="alert" className="text-sm text-red-800">
+          <p role="alert" className="alert">
             {error}
           </p>
         ) : null}
-        <button
-          type="submit"
-          className="min-h-12 border border-stone-900 bg-stone-900 px-3 py-2 text-white disabled:opacity-50"
-          disabled={pending}
-        >
-          {pending ? copy.pending : copy.submit}
+        <button type="submit" className="cta cta-yellow" disabled={pending || !file} aria-disabled={pending || !file}>
+          {pending ? (
+            <>
+              Reading… <span lang="zh-HK">讀緊…</span>
+            </>
+          ) : (
+            <>
+              Read photo <span lang="zh-HK">睇相</span>
+            </>
+          )}
         </button>
         <Suspense fallback={null}>
           <SamplePhoto pending={pending} label={copy.sample} onUse={useSample} />
@@ -133,7 +163,7 @@ function SamplePhoto({ pending, label, onUse }: { pending: boolean; label: strin
   if (!showSampleFixture(process.env.NODE_ENV, qa)) return null;
 
   return (
-    <button type="button" className="min-h-[44px] border px-3 py-2 disabled:opacity-50" disabled={pending} onClick={onUse}>
+    <button type="button" className="cta cta-line" disabled={pending} aria-disabled={pending} onClick={onUse}>
       {label}
     </button>
   );

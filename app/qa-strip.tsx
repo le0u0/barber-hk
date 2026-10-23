@@ -5,7 +5,7 @@ export async function QaStrip() {
   if (!sha) return null;
 
   return (
-    <p data-deploy-sha={sha} className="px-4 py-1 text-[11px] leading-tight text-stone-400">
+    <p data-deploy-sha={sha} className="qa-strip">
       QA {sha}
     </p>
   );
