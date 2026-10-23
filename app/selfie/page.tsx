@@ -2,6 +2,16 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
+import { BilingualAlert } from "../bilingual-alert";
+import {
+  SELFIE_AGAIN,
+  SELFIE_FAIL,
+  SELFIE_NEED,
+  SELFIE_SAMPLE,
+  resolveAlert,
+  withFollowUp,
+  type Bilingual,
+} from "@/lib/alert-copy";
 import { blobToJpegBase64 } from "@/lib/image-file";
 import { loadPrefs, saveBrief, savePrefs } from "@/lib/prefs";
 import { showSampleFixture } from "@/lib/qa";
@@ -14,26 +24,18 @@ const COPY = {
     other: "自拍",
     privacy: "The photo is sent once to write your brief. It is not kept.",
     photo: "Photo",
-    needPhoto: "Choose a photo first.",
-    fail: "Could not read that photo.",
     pending: "Making the brief…",
     submit: "Read photo",
     sample: "Use a sample photo",
-    sampleMissing: "Sample photo is unavailable.",
-    again: "Try another photo.",
   },
   yue: {
     title: "自拍",
     other: "Selfie",
     privacy: "相片只送一次嚟寫備忘，唔會保存。",
     photo: "相片",
-    needPhoto: "請先揀相。",
-    fail: "讀唔到呢張相。",
     pending: "寫緊備忘…",
     submit: "睇相",
     sample: "用示範相",
-    sampleMissing: "示範相用唔到。",
-    again: "換張相。",
   },
 } as const;
 
@@ -41,7 +43,7 @@ export default function SelfiePage() {
   const router = useRouter();
   const yue = usePrefs().lang === "yue";
   const copy = yue ? COPY.yue : COPY.en;
-  const [error, setError] = useState("");
+  const [error, setError] = useState<Bilingual | null>(null);
   const [pending, setPending] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
@@ -54,7 +56,7 @@ export default function SelfiePage() {
     });
     const data = (await response.json()) as BriefResponse & { error?: string };
     if (!response.ok || !data.brief) {
-      throw new Error(data.error || copy.fail);
+      throw new Error(data.error || SELFIE_FAIL.en);
     }
     const prefs = loadPrefs();
     savePrefs({ ...prefs, lastCutId: data.cut.id });
@@ -73,28 +75,34 @@ export default function SelfiePage() {
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!file) {
-      setError(copy.needPhoto);
+      setError(SELFIE_NEED);
       return;
     }
     setPending(true);
-    setError("");
+    setError(null);
     try {
       await send(await blobToJpegBase64(file));
     } catch (caught) {
-      setError(caught instanceof Error ? `${caught.message} ${copy.again}` : `${copy.fail} ${copy.again}`);
+      const message = caught instanceof Error ? caught.message : undefined;
+      setError(withFollowUp(resolveAlert(message, SELFIE_FAIL), SELFIE_AGAIN));
       setPending(false);
     }
   }
 
   async function useSample() {
     setPending(true);
-    setError("");
+    setError(null);
     try {
       const response = await fetch("/fixtures/selfie-sample.png");
-      if (!response.ok) throw new Error(copy.sampleMissing);
+      if (!response.ok) {
+        setError(SELFIE_SAMPLE);
+        setPending(false);
+        return;
+      }
       await send(await blobToJpegBase64(await response.blob()));
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : copy.sampleMissing);
+      const message = caught instanceof Error ? caught.message : undefined;
+      setError(withFollowUp(resolveAlert(message, SELFIE_FAIL), SELFIE_AGAIN));
       setPending(false);
     }
   }
@@ -134,12 +142,8 @@ export default function SelfiePage() {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={preview} alt="" width={120} height={160} className="cut-photo" style={{ width: 120 }} />
         ) : null}
-        {error ? (
-          <p role="alert" className="alert">
-            {error}
-          </p>
-        ) : null}
-        <button type="submit" className="cta cta-yellow" disabled={pending || !file} aria-disabled={pending || !file}>
+        {error ? <BilingualAlert copy={error} yue={yue} /> : null}
+        <button type="submit" className="cta cta-yellow" disabled={pending} aria-disabled={pending}>
           {pending ? (
             <>
               Reading… <span lang="zh-HK">讀緊…</span>

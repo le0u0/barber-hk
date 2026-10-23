@@ -3,6 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useSyncExternalStore } from "react";
+import { BilingualAlert } from "../bilingual-alert";
+import { BRIEF_EMPTY, COPY_FAIL, COPY_OK, leadRest, type Bilingual } from "@/lib/alert-copy";
 import { resolveStoredBrief } from "@/lib/brief-resume";
 import { formatBriefText } from "@/lib/brief-text";
 import { cutView } from "@/lib/cut-views";
@@ -31,27 +33,19 @@ const LABELS = {
 
 const COPY = {
   en: {
-    emptyTitle: "No brief yet",
-    emptyBody: "Take the quiz or send a selfie.",
     quiz: "Quiz",
     selfie: "Selfie",
     copyEn: "Copy English",
     copyYue: "Copy 粵語",
     share: "Share both",
-    copied: "Copied",
-    copyFail: "Could not copy",
     note: "East Asian hair note",
   },
   yue: {
-    emptyTitle: "未有備忘",
-    emptyBody: "先做問卷或者自拍。",
     quiz: "問卷",
     selfie: "自拍",
     copyEn: "複製英文",
     copyYue: "複製粵語",
     share: "一齊分享",
-    copied: "已複製",
-    copyFail: "複製唔到",
     note: "東亞髮質（英文）",
   },
 } as const;
@@ -81,7 +75,7 @@ export default function BriefPage() {
   const copy = yue ? COPY.yue : COPY.en;
   const lang = yue ? "yue" : "en";
   const brief = resolveStoredBrief(raw, prefs.lastCutId);
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState<Bilingual | null>(null);
 
   if (!ready) {
     return <main className="mx-auto min-h-[40vh] w-full max-w-xl px-4 py-6" />;
@@ -90,9 +84,9 @@ export default function BriefPage() {
   async function write(text: string) {
     try {
       await navigator.clipboard.writeText(text);
-      setStatus(copy.copied);
+      setStatus(COPY_OK);
     } catch {
-      setStatus(copy.copyFail);
+      setStatus(COPY_FAIL);
     }
   }
 
@@ -111,10 +105,16 @@ export default function BriefPage() {
   }
 
   if (!brief?.brief) {
+    const title = leadRest(BRIEF_EMPTY.title, yue);
+    const body = leadRest(BRIEF_EMPTY.body, yue);
     return (
       <main className="page-form">
-        <h1 className="hero-title">{copy.emptyTitle}</h1>
-        <p className="hero-yue">{copy.emptyBody}</p>
+        <h1 className="hero-title">
+          {title.lead} <span lang={title.restLang}>{title.rest}</span>
+        </h1>
+        <p className="hero-yue">
+          {body.lead} <span lang={body.restLang}>{body.rest}</span>
+        </p>
         <div className="cta-row">
           <Link href="/quiz" className="cta cta-yellow">
             Quiz <span lang="zh-HK">問卷</span>
@@ -162,11 +162,7 @@ export default function BriefPage() {
           {copy.share}
         </button>
       </div>
-      {status ? (
-        <p role="status" className="ok">
-          {status}
-        </p>
-      ) : null}
+      {status ? <BilingualAlert copy={status} yue={yue} role="status" className="ok" /> : null}
       <div className="brief-langs">
         {order.map((code) => (
           <article key={code} className="brief-card" lang={code === "yue" ? "zh-HK" : "en"}>
