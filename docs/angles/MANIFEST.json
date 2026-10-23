@@ -1,0 +1,238 @@
+[
+  {
+    "cutId": "two-block",
+    "angle": "front",
+    "path": "mtr-assets/angles/two-block/front.jpg",
+    "status": "generated",
+    "source": "strip-4.jpg",
+    "hash12": "c4938a52dd9f"
+  },
+  {
+    "cutId": "two-block",
+    "angle": "three-quarter",
+    "path": "mtr-assets/angles/two-block/three-quarter.jpg",
+    "status": "generated",
+    "source": "strip-4.jpg",
+    "hash12": "9e65e3d1fb25"
+  },
+  {
+    "cutId": "two-block",
+    "angle": "side",
+    "path": "mtr-assets/angles/two-block/side.jpg",
+    "status": "generated",
+    "source": "strip-4.jpg",
+    "hash12": "638157c1a3dc"
+  },
+  {
+    "cutId": "two-block",
+    "angle": "back",
+    "path": "mtr-assets/angles/two-block/back.jpg",
+    "status": "generated",
+    "source": "strip-4.jpg",
+    "hash12": "fbb4f566fcdd"
+  },
+  {
+    "cutId": "crop-fade",
+    "angle": "front",
+    "path": "mtr-assets/angles/crop-fade/front.jpg",
+    "status": "generated",
+    "source": "strip-4.jpg",
+    "hash12": "9a77db93f256"
+  },
+  {
+    "cutId": "crop-fade",
+    "angle": "three-quarter",
+    "path": "mtr-assets/angles/crop-fade/three-quarter.jpg",
+    "status": "generated",
+    "source": "strip-4.jpg",
+    "hash12": "d6e71434c80e"
+  },
+  {
+    "cutId": "crop-fade",
+    "angle": "side",
+    "path": "mtr-assets/angles/crop-fade/side.jpg",
+    "status": "generated",
+    "source": "strip-4.jpg",
+    "hash12": "0e85788e4397"
+  },
+  {
+    "cutId": "crop-fade",
+    "angle": "back",
+    "path": "mtr-assets/angles/crop-fade/back.jpg",
+    "status": "generated",
+    "source": "strip-4.jpg",
+    "hash12": "8ba37fa6c5c3"
+  },
+  {
+    "cutId": "french-crop",
+    "angle": "front",
+    "path": "mtr-assets/angles/french-crop/front.jpg",
+    "status": "generated",
+    "source": "strip-4.jpg",
+    "hash12": "699ad35667e6"
+  },
+  {
+    "cutId": "french-crop",
+    "angle": "three-quarter",
+    "path": "mtr-assets/angles/french-crop/three-quarter.jpg",
+    "status": "generated",
+    "source": "strip-4.jpg",
+    "hash12": "d0f81bb523bb"
+  },
+  {
+    "cutId": "french-crop",
+    "angle": "side",
+    "path": "mtr-assets/angles/french-crop/side.jpg",
+    "status": "generated",
+    "source": "strip-4.jpg",
+    "hash12": "c5b5d9cda0e2"
+  },
+  {
+    "cutId": "french-crop",
+    "angle": "back",
+    "path": "mtr-assets/angles/french-crop/back.jpg",
+    "status": "generated",
+    "source": "strip-4.jpg",
+    "hash12": "cd53977b7536"
+  },
+  {
+    "cutId": "side-part",
+    "angle": "front",
+    "path": "mtr-assets/angles/side-part/front.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "side-part",
+    "angle": "three-quarter",
+    "path": "mtr-assets/angles/side-part/three-quarter.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "side-part",
+    "angle": "side",
+    "path": "mtr-assets/angles/side-part/side.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "side-part",
+    "angle": "back",
+    "path": "mtr-assets/angles/side-part/back.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "curtain",
+    "angle": "front",
+    "path": "mtr-assets/angles/curtain/front.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "curtain",
+    "angle": "three-quarter",
+    "path": "mtr-assets/angles/curtain/three-quarter.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "curtain",
+    "angle": "side",
+    "path": "mtr-assets/angles/curtain/side.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "curtain",
+    "angle": "back",
+    "path": "mtr-assets/angles/curtain/back.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "undercut",
+    "angle": "front",
+    "path": "mtr-assets/angles/undercut/front.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "undercut",
+    "angle": "three-quarter",
+    "path": "mtr-assets/angles/undercut/three-quarter.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "undercut",
+    "angle": "side",
+    "path": "mtr-assets/angles/undercut/side.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "undercut",
+    "angle": "back",
+    "path": "mtr-assets/angles/undercut/back.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "pompadour",
+    "angle": "front",
+    "path": "mtr-assets/angles/pompadour/front.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "pompadour",
+    "angle": "three-quarter",
+    "path": "mtr-assets/angles/pompadour/three-quarter.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "pompadour",
+    "angle": "side",
+    "path": "mtr-assets/angles/pompadour/side.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "pompadour",
+    "angle": "back",
+    "path": "mtr-assets/angles/pompadour/back.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "induction",
+    "angle": "front",
+    "path": "mtr-assets/angles/induction/front.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "induction",
+    "angle": "three-quarter",
+    "path": "mtr-assets/angles/induction/three-quarter.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "induction",
+    "angle": "side",
+    "path": "mtr-assets/angles/induction/side.jpg",
+    "status": "off-demo-path",
+    "source": null
+  },
+  {
+    "cutId": "induction",
+    "angle": "back",
+    "path": "mtr-assets/angles/induction/back.jpg",
+    "status": "off-demo-path",
+    "source": null
+  }
+]

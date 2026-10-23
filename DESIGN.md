@@ -4,14 +4,20 @@ Visitor chrome uses the tokens in `app/globals.css`: cream ground `#F7F4EB`, ink
 
 ## Cut photos
 
-Generated portraits for this branch. They are not customer photos and not the direction comps. A front portrait was the identity lock; the other frames were generated from that reference so the crop and eye-line stay put. Only hair, or the camera angle, changes.
+Demo angles are the figmay pack. Provenance, hashes, and the off-demo list live in `docs/angles/PROVENANCE.md` (`docs/angles/MANIFEST.json`, `docs/angles/ENG-README.md`). They are synthetic references, not customer photos and not a face morph. Swap them for a real shoot later.
+
+Public URLs stay on this pattern (the pack’s `mtr-assets/angles/{cutId}/{angle}.jpg`, served from `public/`):
+
+`/cuts/angles/{cutId}/{front|three-quarter|side|back}.jpg`
+
+`strip-4.jpg` sits beside those frames and is not shown in the carousel.
 
 | Cut | Frames in the UI |
 | --- | --- |
 | Textured crop fade | front, three-quarter, side, back |
+| French crop | front, three-quarter, side, back |
 | Two-block | front, three-quarter, side, back |
-| Curtain middle part | front, three-quarter, side, back |
-| French crop, Office side part, Slick undercut, Short pompadour, Induction buzz | front only, labeled “Front only 只有正面” |
+| Office side part, Curtain middle part, Slick undercut, Short pompadour, Induction buzz | front only, labeled “Front only 只有正面” |
 
 Front-only cards do not open a carousel and do not reuse one photo as fake side or back frames.
 

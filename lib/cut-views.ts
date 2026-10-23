@@ -21,30 +21,23 @@ export type CutView = {
   orbit: boolean;
 };
 
-const ORBIT: Record<string, CutFrame[]> = {
-  "crop-fade": [
-    { angle: "front", image: "/cuts/textured-front.jpg" },
-    { angle: "three-quarter", image: "/cuts/textured-three-quarter.jpg" },
-    { angle: "side", image: "/cuts/textured-side.jpg" },
-    { angle: "back", image: "/cuts/textured-back.jpg" },
-  ],
-  "two-block": [
-    { angle: "front", image: "/cuts/section-front.jpg" },
-    { angle: "three-quarter", image: "/cuts/section-three-quarter.jpg" },
-    { angle: "side", image: "/cuts/section-side.jpg" },
-    { angle: "back", image: "/cuts/section-back.jpg" },
-  ],
-  curtain: [
-    { angle: "front", image: "/cuts/centre-front.jpg" },
-    { angle: "three-quarter", image: "/cuts/centre-three-quarter.jpg" },
-    { angle: "side", image: "/cuts/centre-side.jpg" },
-    { angle: "back", image: "/cuts/centre-back.jpg" },
-  ],
-};
+function orbitFrames(id: string): CutFrame[] {
+  return ANGLE_ORDER.map((angle) => ({
+    angle,
+    image: `/cuts/angles/${id}/${angle}.jpg`,
+  }));
+}
+
+/** Demo path only. Other cuts stay front-only until a real shoot lands. */
+const ORBIT_IDS = ["crop-fade", "french-crop", "two-block"] as const;
+
+const ORBIT: Record<string, CutFrame[]> = Object.fromEntries(
+  ORBIT_IDS.map((id) => [id, orbitFrames(id)]),
+);
 
 const FRONT_ONLY: Record<string, string> = {
-  "french-crop": "/cuts/fringe-front.jpg",
   "side-part": "/cuts/office-front.jpg",
+  curtain: "/cuts/centre-front.jpg",
   undercut: "/cuts/slick-front.jpg",
   pompadour: "/cuts/volume-front.jpg",
   induction: "/cuts/buzz-front.jpg",

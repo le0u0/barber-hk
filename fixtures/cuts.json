@@ -3,7 +3,7 @@
     "id": "crop-fade",
     "nameEn": "Textured crop fade",
     "nameYue": "碎蓋漸變",
-    "image": "/cuts/textured-front.jpg",
+    "image": "/cuts/angles/crop-fade/front.jpg",
     "eastAsianNote": "East Asian male hair is often thick and straight, so a crop boxes out if it is only clipper-cut. Ask for point-cutting through the corners and to keep the parietal ridge soft. A low skin fade shows head shape; leave weight off the fringe so it does not sit like a helmet.",
     "brief": {
       "en": {
@@ -26,7 +26,7 @@
     "id": "french-crop",
     "nameEn": "French crop",
     "nameYue": "法式碎蓋",
-    "image": "/cuts/fringe-front.jpg",
+    "image": "/cuts/angles/french-crop/front.jpg",
     "eastAsianNote": "A blunt fringe on straight East Asian hair grows into the eyes within two weeks and can look like a wig line. Leave it just above the brow and texturize only the last centimetre. If there is a crown whorl, cut the fringe with the growth.",
     "brief": {
       "en": {
@@ -49,7 +49,7 @@
     "id": "two-block",
     "nameEn": "Two-block",
     "nameYue": "兩節頭",
-    "image": "/cuts/section-front.jpg",
+    "image": "/cuts/angles/two-block/front.jpg",
     "eastAsianNote": "The two-block is a default Hong Kong and Korean men's cut. On dense straight hair the weight line looks painted on unless the barber cuts it with scissors over the clipper. Do not take the top so short that there is nothing to separate.",
     "brief": {
       "en": {
