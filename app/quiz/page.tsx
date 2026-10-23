@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { BilingualAlert } from "../bilingual-alert";
+import { QUIZ_FAIL, QUIZ_INCOMPLETE, resolveAlert, type Bilingual } from "@/lib/alert-copy";
 import { isQuiz, saveBrief, savePrefs } from "@/lib/prefs";
 import { usePrefs } from "@/lib/use-prefs";
 import type { BriefResponse, QuizAnswers } from "@/lib/types";
@@ -59,16 +61,12 @@ const COPY = {
   en: {
     title: "Quiz",
     other: "問卷",
-    incomplete: "Pick all four. 四題都要揀",
-    fail: "Could not make a brief.",
     pending: "Making the brief…",
     submit: "Show brief",
   },
   yue: {
     title: "問卷",
     other: "Quiz",
-    incomplete: "四題都要揀。Pick all four.",
-    fail: "出唔到備忘。",
     pending: "寫緊備忘…",
     submit: "出備忘",
   },
@@ -81,17 +79,17 @@ export default function QuizPage() {
   const copy = yue ? COPY.yue : COPY.en;
   const [draft, setDraft] = useState<Partial<QuizAnswers> | null>(null);
   const answers = draft ?? prefs.quiz ?? {};
-  const [error, setError] = useState("");
+  const [error, setError] = useState<Bilingual | null>(null);
   const [pending, setPending] = useState(false);
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     if (!isQuiz(answers)) {
-      setError(copy.incomplete);
+      setError(QUIZ_INCOMPLETE);
       return;
     }
     setPending(true);
-    setError("");
+    setError(null);
     try {
       const response = await fetch("/api/brief", {
         method: "POST",
@@ -100,13 +98,14 @@ export default function QuizPage() {
       });
       const data = (await response.json()) as BriefResponse & { error?: string };
       if (!response.ok || !data.brief) {
-        throw new Error(data.error || copy.fail);
+        throw new Error(data.error || QUIZ_FAIL.en);
       }
       savePrefs({ ...prefs, quiz: answers, lastCutId: data.cut.id });
       saveBrief(data);
       router.push("/brief");
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : copy.fail);
+      const message = caught instanceof Error ? caught.message : undefined;
+      setError(resolveAlert(message, QUIZ_FAIL));
       setPending(false);
     }
   }
@@ -154,11 +153,7 @@ export default function QuizPage() {
             ))}
           </fieldset>
         ))}
-        {error ? (
-          <p role="alert" className="alert">
-            {error}
-          </p>
-        ) : null}
+        {error ? <BilingualAlert copy={error} yue={yue} /> : null}
         <button type="submit" className="cta cta-yellow" disabled={pending} aria-disabled={pending}>
           {pending ? (
             <>
