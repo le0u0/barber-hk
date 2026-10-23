@@ -1,3 +1,4 @@
+import manifest from "../docs/angles/MANIFEST.json";
 import { listCutCards } from "./catalog";
 
 export const ANGLE_ORDER = ["front", "three-quarter", "side", "back"] as const;
@@ -21,19 +22,26 @@ export type CutView = {
   orbit: boolean;
 };
 
-function orbitFrames(id: string): CutFrame[] {
-  return ANGLE_ORDER.map((angle) => ({
-    angle,
-    image: `/cuts/angles/${id}/${angle}.jpg`,
-  }));
+type ManifestRow = {
+  cutId: string;
+  angle: string;
+  path: string;
+  status: string;
+};
+
+const MANIFEST = manifest as ManifestRow[];
+
+/** Four frames only when every angle is manifest status `generated` at the pack path. */
+function generatedOrbit(id: string): CutFrame[] | null {
+  const frames: CutFrame[] = [];
+  for (const angle of ANGLE_ORDER) {
+    const path = `mtr-assets/angles/${id}/${angle}.jpg`;
+    const row = MANIFEST.find((entry) => entry.cutId === id && entry.angle === angle);
+    if (!row || row.status !== "generated" || row.path !== path) return null;
+    frames.push({ angle, image: `/${path}` });
+  }
+  return frames;
 }
-
-/** Demo path only. Other cuts stay front-only until a real shoot lands. */
-const ORBIT_IDS = ["crop-fade", "french-crop", "two-block"] as const;
-
-const ORBIT: Record<string, CutFrame[]> = Object.fromEntries(
-  ORBIT_IDS.map((id) => [id, orbitFrames(id)]),
-);
 
 const FRONT_ONLY: Record<string, string> = {
   "side-part": "/cuts/office-front.jpg",
@@ -45,7 +53,7 @@ const FRONT_ONLY: Record<string, string> = {
 
 export function listCutViews(): CutView[] {
   return listCutCards().map((card) => {
-    const orbit = ORBIT[card.id];
+    const orbit = generatedOrbit(card.id);
     if (orbit) {
       return { id: card.id, nameEn: card.nameEn, nameYue: card.nameYue, frames: orbit, orbit: true };
     }

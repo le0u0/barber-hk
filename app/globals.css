@@ -391,6 +391,29 @@ button.cut-card:hover {
   position: relative;
 }
 
+.synthetic-badge {
+  position: absolute;
+  z-index: 1;
+  top: var(--space-2);
+  left: var(--space-2);
+  margin: 0;
+  padding: var(--space-1) var(--space-2);
+  background: var(--ink);
+  color: var(--mtr-yellow);
+  font-size: var(--type-meta);
+  font-weight: 650;
+  line-height: var(--type-meta-lh);
+  pointer-events: none;
+}
+
+.synthetic-caption {
+  margin: var(--space-2) 0 0;
+  color: var(--ink);
+  font-size: var(--type-label);
+  font-weight: 600;
+  line-height: var(--type-label-lh);
+}
+
 .orbit-scroller {
   display: flex;
   overflow-x: auto;

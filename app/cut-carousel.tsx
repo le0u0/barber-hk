@@ -86,11 +86,14 @@ export function CutCarousel({
       className="orbit"
       role="region"
       aria-roledescription="carousel"
-      aria-label={`${nameEn} angles`}
+      aria-label={`${nameEn} angles. Synthetic reference, not a customer photo.`}
       tabIndex={0}
       onKeyDown={onKeyDown}
     >
       <div className="orbit-stage">
+        <p className="synthetic-badge">
+          Synthetic ref <span lang="zh-HK">合成參考</span>
+        </p>
         {reduce ? (
           <Image
             src={frame.image}
@@ -148,6 +151,9 @@ export function CutCarousel({
           ›
         </button>
       </div>
+      <p className="synthetic-caption">
+        Not a customer photo <span lang="zh-HK">唔係客人相</span>
+      </p>
       <h3 className="cut-name-en" style={{ fontSize: "var(--type-title)", marginTop: "var(--space-2)" }}>
         {nameEn}
       </h3>

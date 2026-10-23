@@ -6,9 +6,11 @@ Visitor chrome uses the tokens in `app/globals.css`: cream ground `#F7F4EB`, ink
 
 Demo angles are the figmay pack. Provenance, hashes, and the off-demo list live in `docs/angles/PROVENANCE.md` (`docs/angles/MANIFEST.json`, `docs/angles/ENG-README.md`). They are synthetic references, not customer photos and not a face morph. Swap them for a real shoot later.
 
-Public URLs stay on this pattern (the pack’s `mtr-assets/angles/{cutId}/{angle}.jpg`, served from `public/`):
+Public URLs stay on the pack path, served from `public/`:
 
-`/cuts/angles/{cutId}/{front|three-quarter|side|back}.jpg`
+`/mtr-assets/angles/{cutId}/{front|three-quarter|side|back}.jpg`
+
+A cut gets that carousel only when `docs/angles/MANIFEST.json` marks all four angles `generated`. The carousel shows a badge, “Synthetic ref 合成參考”, and the caption “Not a customer photo 唔係客人相”.
 
 `strip-4.jpg` sits beside those frames and is not shown in the carousel.
 

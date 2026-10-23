@@ -19,7 +19,7 @@ describe("cut views", () => {
     for (const view of orbits) {
       expect(view.frames.map((frame) => frame.angle)).toEqual([...ANGLE_ORDER]);
       expect(view.frames.map((frame) => frame.image)).toEqual(
-        ANGLE_ORDER.map((angle) => `/cuts/angles/${view.id}/${angle}.jpg`),
+        ANGLE_ORDER.map((angle) => `/mtr-assets/angles/${view.id}/${angle}.jpg`),
       );
     }
 
@@ -37,22 +37,27 @@ describe("cut views", () => {
       angle: string;
       status: string;
       hash12?: string;
+      path: string;
     }[];
 
     for (const id of DEMO) {
       for (const angle of ANGLE_ORDER) {
-        const file = join(process.cwd(), "public/cuts/angles", id, `${angle}.jpg`);
+        const file = join(process.cwd(), "public/mtr-assets/angles", id, `${angle}.jpg`);
         expect(existsSync(file)).toBe(true);
         const hash12 = createHash("md5").update(readFileSync(file)).digest("hex").slice(0, 12);
         const row = manifest.find((entry) => entry.cutId === id && entry.angle === angle);
         expect(row?.status).toBe("generated");
+        expect(row?.path).toBe(`mtr-assets/angles/${id}/${angle}.jpg`);
         expect(row?.hash12).toBe(hash12);
       }
-      expect(existsSync(join(process.cwd(), "public/cuts/angles", id, "strip-4.jpg"))).toBe(true);
+      expect(existsSync(join(process.cwd(), "public/mtr-assets/angles", id, "strip-4.jpg"))).toBe(true);
     }
 
     for (const id of OFF_DEMO) {
-      expect(existsSync(join(process.cwd(), "public/cuts/angles", id))).toBe(false);
+      expect(existsSync(join(process.cwd(), "public/mtr-assets/angles", id))).toBe(false);
+      const rows = manifest.filter((entry) => entry.cutId === id);
+      expect(rows.length).toBeGreaterThan(0);
+      expect(rows.every((entry) => entry.status !== "generated")).toBe(true);
     }
   });
 
