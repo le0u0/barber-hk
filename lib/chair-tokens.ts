@@ -14,9 +14,48 @@ export const chairTokens = {
 
 export function chairStyle(): CSSProperties {
   return {
-    "--chair-canvas": chairTokens.canvas,
-    "--chair-ink": chairTokens.ink,
-    "--chair-vermillion": chairTokens.vermillion,
-    "--chair-on-vermillion": chairTokens.onVermillion,
-  } as CSSProperties;
+    background: chairTokens.canvas,
+    color: chairTokens.ink,
+    colorScheme: "light",
+  };
+}
+
+export function chairOptionStyle(selected: boolean): CSSProperties {
+  return {
+    borderColor: selected
+      ? chairTokens.vermillion
+      : `color-mix(in srgb, ${chairTokens.ink} 22%, ${chairTokens.canvas})`,
+    background: selected
+      ? `color-mix(in srgb, ${chairTokens.vermillion} 10%, ${chairTokens.canvas})`
+      : chairTokens.canvas,
+    color: chairTokens.ink,
+    minHeight: 44,
+    borderRadius: 2,
+    borderWidth: 2,
+    borderStyle: "solid",
+  };
+}
+
+export function chairPrimaryStyle(): CSSProperties {
+  return {
+    background: chairTokens.vermillion,
+    color: chairTokens.onVermillion,
+    borderColor: chairTokens.vermillion,
+    minHeight: 44,
+    borderRadius: 2,
+    borderWidth: 2,
+    borderStyle: "solid",
+  };
+}
+
+export function chairLineStyle(): CSSProperties {
+  return {
+    background: "transparent",
+    color: chairTokens.ink,
+    borderColor: chairTokens.ink,
+    minHeight: 44,
+    borderRadius: 2,
+    borderWidth: 2,
+    borderStyle: "solid",
+  };
 }

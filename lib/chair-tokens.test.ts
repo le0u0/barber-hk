@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { chairError, joinCopy, lead, quizCopy, quizQuestions, selfieCopy } from "./chair-copy";
-import { chairTokens } from "./chair-tokens";
+import { chairLineStyle, chairOptionStyle, chairPrimaryStyle, chairTokens } from "./chair-tokens";
 
 const CJK = /[\u3400-\u9fff]/;
 const YELLOW = /#ffd300|mtr-yellow/i;
@@ -16,7 +16,6 @@ describe("chair tokens", () => {
     });
 
     const paint = [
-      readFileSync("app/chair.module.css", "utf8"),
       readFileSync("app/quiz/page.tsx", "utf8"),
       readFileSync("app/selfie/page.tsx", "utf8"),
       readFileSync("lib/chair-tokens.ts", "utf8"),
@@ -27,6 +26,16 @@ describe("chair tokens", () => {
     expect(paint.toLowerCase()).toContain(chairTokens.ink.toLowerCase());
     expect(paint.toLowerCase()).toContain(chairTokens.vermillion.toLowerCase());
     expect(paint).not.toMatch(YELLOW);
+    expect(chairPrimaryStyle()).toMatchObject({
+      background: chairTokens.vermillion,
+      color: chairTokens.onVermillion,
+      minHeight: 44,
+      borderRadius: 2,
+    });
+    expect(chairLineStyle().borderColor).toBe(chairTokens.ink);
+    expect(chairOptionStyle(true).borderColor).toBe(chairTokens.vermillion);
+    expect(chairOptionStyle(false).borderColor).not.toBe(chairTokens.vermillion);
+    expect(JSON.stringify(chairOptionStyle(true))).not.toMatch(YELLOW);
   });
 });
 

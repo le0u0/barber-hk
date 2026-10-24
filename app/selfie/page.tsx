@@ -3,9 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ChairPair } from "@/app/chair-pair";
-import styles from "@/app/chair.module.css";
 import { chairError, joinCopy, selfieCopy } from "@/lib/chair-copy";
-import { chairStyle } from "@/lib/chair-tokens";
+import { chairLineStyle, chairPrimaryStyle, chairStyle, chairTokens } from "@/lib/chair-tokens";
 import { blobToJpegBase64 } from "@/lib/image-file";
 import { BRIEF_KEY, loadPrefs, savePrefs } from "@/lib/prefs";
 import { useChairPaint } from "@/lib/use-chair-paint";
@@ -67,30 +66,30 @@ export default function SelfiePage() {
   }
 
   return (
-    <main className={styles.screen} data-chair="selfie" style={chairStyle()}>
-      <h1 className={styles.title}>
+    <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-6" data-chair="selfie" style={chairStyle()}>
+      <h1 className="text-3xl font-bold tracking-tight">
         <ChairPair copy={selfieCopy.title} lang={lang} />
       </h1>
-      <p className={styles.lede}>
+      <p className="text-base leading-normal">
         <ChairPair copy={selfieCopy.privacy} lang={lang} />
       </p>
-      <p className={styles.note}>
+      <p className="text-sm">
         <code>fixtures/selfie-sample.png</code>
       </p>
-      <form className={styles.form} lang={lang === "yue" ? "zh-HK" : "en"} onSubmit={onSubmit}>
-        <label className={styles.file}>
+      <form className="flex flex-col gap-3" lang={lang === "yue" ? "zh-HK" : "en"} noValidate onSubmit={onSubmit}>
+        <label className="flex flex-col justify-center gap-2 px-3 py-2 font-bold" style={chairLineStyle()}>
           <ChairPair copy={selfieCopy.photo} lang={lang} />
-          <input name="photo" type="file" accept="image/jpeg,image/png,image/webp" required />
+          <input className="max-w-full font-normal" name="photo" type="file" accept="image/jpeg,image/png,image/webp" />
         </label>
         {error ? (
-          <p role="alert" className={styles.alert}>
+          <p role="alert" className="font-bold" style={{ color: chairTokens.vermillion }}>
             {error}
           </p>
         ) : null}
-        <button type="submit" className={styles.primary} disabled={pending}>
+        <button type="submit" className="w-full px-3 py-2 text-base font-bold disabled:opacity-50" style={chairPrimaryStyle()} disabled={pending}>
           <ChairPair copy={pending ? selfieCopy.pending : selfieCopy.submit} lang={lang} />
         </button>
-        <button type="button" className={styles.line} disabled={pending} onClick={useSample}>
+        <button type="button" className="w-full px-3 py-2 text-base font-bold disabled:opacity-50" style={chairLineStyle()} disabled={pending} onClick={useSample}>
           <ChairPair copy={selfieCopy.sample} lang={lang} />
         </button>
       </form>
