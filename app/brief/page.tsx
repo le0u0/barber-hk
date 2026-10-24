@@ -95,6 +95,20 @@ export default function BriefPage() {
           </p>
         </div>
       </div>
+      {brief.face ? (
+        <section className="border border-stone-300 bg-white p-3 text-sm">
+          <h2 className="font-semibold">
+            Face shape <span lang="zh-HK">面型</span>
+          </h2>
+          <p className="mt-2">
+            {brief.face.nameEn} <span lang="zh-HK">{brief.face.nameYue}</span>
+          </p>
+          <p className="mt-2">{brief.face.noteEn}</p>
+          <p lang="zh-HK" className="mt-1">
+            {brief.face.noteYue}
+          </p>
+        </section>
+      ) : null}
       <CopyBlock lang="en" title="English" copy={brief.brief.en} />
       <CopyBlock lang="yue" title="粵語" copy={brief.brief.yue} />
       <section className="text-sm">

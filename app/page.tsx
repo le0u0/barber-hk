@@ -11,6 +11,9 @@ export default function Home() {
       <div className="flex flex-col gap-2">
         <h1 className="text-2xl font-semibold">A brief for your barber</h1>
         <p lang="zh-HK">畀師傅睇嘅備忘。英文同粵語一齊出。</p>
+        <p className="text-sm">
+          The quiz starts with a face-shape chart. <span lang="zh-HK">問卷先揀面型圖。</span>
+        </p>
         <LastPick />
       </div>
       <div className="flex gap-3">

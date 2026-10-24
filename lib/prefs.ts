@@ -1,3 +1,4 @@
+import { isFaceShape, type FaceShapeId } from "./face-shape";
 import type { QuizAnswers } from "./types";
 
 export const PREFS_KEY = "barber-hk:v1";
@@ -8,9 +9,10 @@ export type Prefs = {
   lang: "en" | "yue";
   quiz: QuizAnswers | null;
   lastCutId: string | null;
+  faceShape: FaceShapeId | null;
 };
 
-export const EMPTY_PREFS: Prefs = { lang: "en", quiz: null, lastCutId: null };
+export const EMPTY_PREFS: Prefs = { lang: "en", quiz: null, lastCutId: null, faceShape: null };
 
 const SIDES = ["skin", "taper", "scissor"] as const;
 const TOPS = ["buzz", "short", "medium", "long"] as const;
@@ -43,6 +45,7 @@ function parsePrefs(raw: string | null): Prefs {
       lang: data.lang === "yue" ? "yue" : "en",
       quiz: isQuiz(data.quiz) ? data.quiz : null,
       lastCutId: typeof data.lastCutId === "string" ? data.lastCutId : null,
+      faceShape: isFaceShape(data.faceShape) ? data.faceShape : null,
     };
   } catch {
     return EMPTY_PREFS;

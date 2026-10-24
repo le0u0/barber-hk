@@ -26,6 +26,7 @@ Leave it empty. The quiz still returns a usable brief from `fixtures/cuts.json`.
 - `lang`: `en` or `yue` (UI toggle)
 - `quiz`: last quiz answers
 - `lastCutId`: last cut id
+- `faceShape`: last face-shape chart pick (`oval`, `round`, `square`, `oblong`, `heart`, `diamond`), or omitted
 
 The brief shown on `/brief` is held in `sessionStorage` (`barber-hk:brief`) for that tab. Nothing is stored on the server.
 
@@ -44,7 +45,8 @@ The footer prints `VERCEL_GIT_COMMIT_SHA`, then `GITHUB_SHA`, then `local`, and 
 
 `POST /api/brief`
 
-- Quiz: `{ "path": "quiz", "answers": { "sides", "top", "finish", "part" } }`
+- Quiz: `{ "path": "quiz", "answers": { "sides", "top", "finish", "part" }, "faceShape"? }`
+  - `faceShape` is optional. When it is one of the six chart ids, the brief includes a static `face` note. An unknown value is `400`. Omitting it leaves the brief unchanged. The chart is not a photo and not a try-on.
 - Selfie: `{ "path": "selfie", "mimeType": "image/jpeg"|"image/png"|"image/webp", "imageBase64" }`
 
 `GET /api/brief` returns `{ count: 8, ids: [...] }`.

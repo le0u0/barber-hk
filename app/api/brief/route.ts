@@ -1,4 +1,5 @@
 import { getCut, listCuts, matchCut } from "@/lib/catalog";
+import { faceGuide } from "@/lib/face-shape";
 import { writeWithGemini } from "@/lib/gemini";
 import { isQuiz } from "@/lib/prefs";
 import type { BriefResponse, QuizAnswers } from "@/lib/types";
@@ -51,30 +52,52 @@ export async function POST(request: Request) {
     return Response.json({ error: "Send JSON." }, { status: 400 });
   }
 
-  const payload = body as { path?: unknown; answers?: unknown; imageBase64?: unknown; mimeType?: unknown };
+  const payload = body as {
+    path?: unknown;
+    answers?: unknown;
+    imageBase64?: unknown;
+    mimeType?: unknown;
+    faceShape?: unknown;
+  };
 
   if (payload.path === "quiz") {
     if (!isQuiz(payload.answers)) {
       return Response.json({ error: "Quiz answers are incomplete." }, { status: 400 });
     }
     const answers = payload.answers as QuizAnswers;
+    let face: BriefResponse["face"];
+    if ("faceShape" in payload && payload.faceShape !== undefined) {
+      const guide = faceGuide(payload.faceShape);
+      if (!guide) {
+        return Response.json({ error: "Unknown face shape." }, { status: 400 });
+      }
+      face = guide;
+    }
     const cut = matchCut(answers);
-    const gemini = await writeWithGemini({ mode: "quiz", cutId: cut.id, answers });
+    const gemini = await writeWithGemini({
+      mode: "quiz",
+      cutId: cut.id,
+      answers,
+      faceShape: face ? `${face.nameEn} / ${face.nameYue}` : undefined,
+    });
+    const attach = (response: BriefResponse) => (face ? { ...response, face } : response);
     if (gemini.ok) {
-      return Response.json(briefFor(cut.id, { en: gemini.en, yue: gemini.yue }, { source: "gemini" }));
+      return Response.json(attach(briefFor(cut.id, { en: gemini.en, yue: gemini.yue }, { source: "gemini" })));
     }
     return Response.json(
-      briefFor(cut.id, cut.brief, {
-        source: "fallback",
-        fallbackReason: gemini.reason,
-        notice:
-          gemini.reason === "missing_key"
-            ? undefined
-            : {
-                en: "Gemini did not answer. This is the saved brief for your quiz answers.",
-                yue: "Gemini 未答到。以下係按你問卷配好嘅備忘。",
-              },
-      }),
+      attach(
+        briefFor(cut.id, cut.brief, {
+          source: "fallback",
+          fallbackReason: gemini.reason,
+          notice:
+            gemini.reason === "missing_key"
+              ? undefined
+              : {
+                  en: "Gemini did not answer. This is the saved brief for your quiz answers.",
+                  yue: "Gemini 未答到。以下係按你問卷配好嘅備忘。",
+                },
+        }),
+      ),
     );
   }
 

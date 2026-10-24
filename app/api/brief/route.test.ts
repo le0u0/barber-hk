@@ -40,6 +40,40 @@ describe("POST /api/brief", () => {
     expect(globalThis.fetch).not.toHaveBeenCalled();
   });
 
+  it("attaches the face-shape chart note and still matches the quiz cut", async () => {
+    const response = await post({
+      path: "quiz",
+      answers: { sides: "skin", top: "short", finish: "textured", part: "none" },
+      faceShape: "round",
+    });
+    const body = (await response.json()) as {
+      source: string;
+      cut: { id: string };
+      face?: { id: string; nameYue: string; noteEn: string };
+    };
+
+    expect(response.status).toBe(200);
+    expect(body.source).toBe("fallback");
+    expect(body.cut.id).toBe("crop-fade");
+    expect(body.face?.id).toBe("round");
+    expect(body.face?.nameYue).toBe("圓面");
+    expect(body.face?.noteEn).toMatch(/height on top/);
+    expect(globalThis.fetch).not.toHaveBeenCalled();
+  });
+
+  it("rejects an unknown face shape", async () => {
+    const response = await post({
+      path: "quiz",
+      answers: { sides: "skin", top: "short", finish: "textured", part: "none" },
+      faceShape: "triangle",
+    });
+    const body = (await response.json()) as { error?: string };
+
+    expect(response.status).toBe(400);
+    expect(body.error).toMatch(/face shape/i);
+    expect(globalThis.fetch).not.toHaveBeenCalled();
+  });
+
   it("rejects a selfie whose mime type is not a photo", async () => {
     const response = await post({
       path: "selfie",

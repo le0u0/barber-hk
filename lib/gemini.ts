@@ -51,6 +51,7 @@ export async function writeWithGemini(input: {
   cutId?: string;
   answers?: QuizAnswers;
   image?: { mimeType: string; data: string };
+  faceShape?: string;
 }): Promise<GeminiOk | GeminiFail> {
   const key = process.env.GEMINI_API_KEY?.trim() ?? "";
   if (!key) return { ok: false, reason: "missing_key" };
@@ -70,6 +71,9 @@ export async function writeWithGemini(input: {
       ? `The cut is already chosen: ${input.cutId}. Keep that cutId. Use the quiz only to phrase the brief.`
       : "Look at the photo and pick the single closest cutId from the list. Do not describe a generated hairstyle image.",
     input.answers ? `Quiz answers: ${JSON.stringify(input.answers)}` : "",
+    input.faceShape
+      ? `Face-shape chart (not a photo and not a try-on): ${input.faceShape}. You may mention it in the ask. Do not describe a face photo, a morph, or a try-on.`
+      : "",
   ]
     .filter(Boolean)
     .join("\n");

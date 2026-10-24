@@ -2,9 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { FACE_CHART_COPY, isFaceShape, type FaceShapeId } from "@/lib/face-shape";
 import { BRIEF_KEY, isQuiz, savePrefs } from "@/lib/prefs";
 import { usePrefs } from "@/lib/use-prefs";
 import type { BriefResponse, QuizAnswers } from "@/lib/types";
+import { FaceChart } from "./face-chart";
 
 const QUESTIONS: Array<{
   key: keyof QuizAnswers;
@@ -54,12 +56,23 @@ export default function QuizPage() {
   const router = useRouter();
   const prefs = usePrefs();
   const [draft, setDraft] = useState<Partial<QuizAnswers> | null>(null);
+  const [faceDraft, setFaceDraft] = useState<FaceShapeId | null>(null);
   const answers = draft ?? prefs.quiz ?? {};
+  const faceShape = faceDraft ?? prefs.faceShape;
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
 
+  function chooseFace(id: FaceShapeId) {
+    setFaceDraft(id);
+    savePrefs({ ...prefs, faceShape: id });
+  }
+
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
+    if (!isFaceShape(faceShape)) {
+      setError(`${FACE_CHART_COPY.needEn} ${FACE_CHART_COPY.needYue}`);
+      return;
+    }
     if (!isQuiz(answers)) {
       setError("Answer every question. 請答完四條。");
       return;
@@ -70,13 +83,13 @@ export default function QuizPage() {
       const response = await fetch("/api/brief", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ path: "quiz", answers }),
+        body: JSON.stringify({ path: "quiz", answers, faceShape }),
       });
       const data = (await response.json()) as BriefResponse & { error?: string };
       if (!response.ok || !data.brief) {
         throw new Error(data.error || "Could not make a brief.");
       }
-      savePrefs({ ...prefs, quiz: answers, lastCutId: data.cut.id });
+      savePrefs({ ...prefs, quiz: answers, lastCutId: data.cut.id, faceShape });
       sessionStorage.setItem(BRIEF_KEY, JSON.stringify(data));
       router.push("/brief");
     } catch (caught) {
@@ -89,6 +102,7 @@ export default function QuizPage() {
     <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-6">
       <h1 className="text-2xl font-semibold">Quiz 問卷</h1>
       <form className="flex flex-col gap-4" onSubmit={onSubmit}>
+        <FaceChart value={faceShape} onChange={chooseFace} />
         {QUESTIONS.map((question) => (
           <fieldset key={question.key} className="border border-stone-300 p-3">
             <legend className="px-1 text-sm font-medium">{question.legend}</legend>

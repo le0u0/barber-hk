@@ -46,7 +46,7 @@ describe("guest prefs", () => {
     );
     invalidatePrefs();
 
-    expect(loadPrefs()).toEqual({ lang: "yue", quiz: null, lastCutId: "curtain" });
+    expect(loadPrefs()).toEqual({ lang: "yue", quiz: null, lastCutId: "curtain", faceShape: null });
   });
 
   it("ignores stored prefs that are not json", () => {
@@ -57,9 +57,21 @@ describe("guest prefs", () => {
   });
 
   it("saves language, quiz, and last cut for the next load", () => {
-    savePrefs({ lang: "yue", quiz: validQuiz, lastCutId: "crop-fade" });
+    savePrefs({ lang: "yue", quiz: validQuiz, lastCutId: "crop-fade", faceShape: null });
 
-    expect(loadPrefs()).toEqual({ lang: "yue", quiz: validQuiz, lastCutId: "crop-fade" });
+    expect(loadPrefs()).toEqual({ lang: "yue", quiz: validQuiz, lastCutId: "crop-fade", faceShape: null });
     expect(localStorage.getItem(PREFS_KEY)).toContain("crop-fade");
+  });
+
+  it("keeps a known face shape and drops an unknown one", () => {
+    savePrefs({ lang: "en", quiz: validQuiz, lastCutId: null, faceShape: "round" });
+    expect(loadPrefs().faceShape).toBe("round");
+
+    localStorage.setItem(
+      PREFS_KEY,
+      JSON.stringify({ lang: "en", quiz: validQuiz, lastCutId: null, faceShape: "triangle" }),
+    );
+    invalidatePrefs();
+    expect(loadPrefs().faceShape).toBeNull();
   });
 });

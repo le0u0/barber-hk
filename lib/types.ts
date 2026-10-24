@@ -1,3 +1,5 @@
+import type { FaceGuide } from "./face-shape";
+
 export type QuizAnswers = {
   sides: "skin" | "taper" | "scissor";
   top: "buzz" | "short" | "medium" | "long";
@@ -25,4 +27,5 @@ export type BriefResponse = {
     eastAsianNote: string;
   };
   brief: { en: BriefCopy; yue: BriefCopy };
+  face?: FaceGuide;
 };
