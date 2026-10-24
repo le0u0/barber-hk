@@ -1,8 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
+import { CutFigure } from "@/app/cut-figure";
+import { cutView } from "@/lib/cut-views";
 import { BRIEF_KEY } from "@/lib/prefs";
 import type { BriefCopy, BriefResponse } from "@/lib/types";
 
@@ -56,6 +57,8 @@ export default function BriefPage() {
     }
   }
 
+  const view = brief?.cut ? cutView(brief.cut.id) : null;
+
   if (!brief?.brief) {
     return (
       <main className="mx-auto flex max-w-xl flex-col gap-3 px-4 py-6">
@@ -83,8 +86,12 @@ export default function BriefPage() {
           <p lang="zh-HK">{brief.notice.yue}</p>
         </div>
       ) : null}
-      <div className="flex items-end gap-3">
-        <Image src={brief.cut.image} alt="" width={96} height={128} unoptimized />
+      <div className="flex flex-col gap-3">
+        {view ? (
+          <div className="max-w-xs">
+            <CutFigure card={view} />
+          </div>
+        ) : null}
         <div>
           <h1 className="text-2xl font-semibold">{brief.cut.nameEn}</h1>
           <p lang="zh-HK" className="text-lg">
