@@ -15,7 +15,7 @@ export type BriefCopy = {
 
 export type BriefResponse = {
   source: "gemini" | "fallback";
-  fallbackReason?: "missing_key" | "gemini_error";
+  fallbackReason?: "missing_key" | "gemini_error" | "offline";
   notice?: { en: string; yue: string };
   cut: {
     id: string;

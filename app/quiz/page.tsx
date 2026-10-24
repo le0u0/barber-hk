@@ -2,9 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { QUIZ_FAIL, QUIZ_INCOMPLETE, apiErrorCopy, requestQuizBrief } from "@/lib/fallback-brief";
 import { BRIEF_KEY, isQuiz, savePrefs } from "@/lib/prefs";
 import { usePrefs } from "@/lib/use-prefs";
-import type { BriefResponse, QuizAnswers } from "@/lib/types";
+import type { QuizAnswers } from "@/lib/types";
 
 const QUESTIONS: Array<{
   key: keyof QuizAnswers;
@@ -55,32 +56,25 @@ export default function QuizPage() {
   const prefs = usePrefs();
   const [draft, setDraft] = useState<Partial<QuizAnswers> | null>(null);
   const answers = draft ?? prefs.quiz ?? {};
-  const [error, setError] = useState("");
+  const [error, setError] = useState<{ en: string; yue: string } | null>(null);
   const [pending, setPending] = useState(false);
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
     if (!isQuiz(answers)) {
-      setError("Answer every question. 請答完四條。");
+      setError(QUIZ_INCOMPLETE);
       return;
     }
     setPending(true);
-    setError("");
+    setError(null);
     try {
-      const response = await fetch("/api/brief", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ path: "quiz", answers }),
-      });
-      const data = (await response.json()) as BriefResponse & { error?: string };
-      if (!response.ok || !data.brief) {
-        throw new Error(data.error || "Could not make a brief.");
-      }
+      const data = await requestQuizBrief(answers, { onLine: navigator.onLine });
       savePrefs({ ...prefs, quiz: answers, lastCutId: data.cut.id });
       sessionStorage.setItem(BRIEF_KEY, JSON.stringify(data));
       router.push("/brief");
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Could not make a brief.");
+      const message = caught instanceof Error ? caught.message : undefined;
+      setError(apiErrorCopy(message, QUIZ_FAIL));
       setPending(false);
     }
   }
@@ -88,7 +82,7 @@ export default function QuizPage() {
   return (
     <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-6">
       <h1 className="text-2xl font-semibold">Quiz 問卷</h1>
-      <form className="flex flex-col gap-4" onSubmit={onSubmit}>
+      <form className="flex flex-col gap-4" noValidate onSubmit={onSubmit}>
         {QUESTIONS.map((question) => (
           <fieldset key={question.key} className="border border-stone-300 p-3">
             <legend className="px-1 text-sm font-medium">{question.legend}</legend>
@@ -116,7 +110,7 @@ export default function QuizPage() {
         ))}
         {error ? (
           <p role="alert" className="text-sm text-red-800">
-            {error}
+            {error.en} <span lang="zh-HK">{error.yue}</span>
           </p>
         ) : null}
         <button type="submit" className="border border-stone-900 px-3 py-2 disabled:opacity-50" disabled={pending}>

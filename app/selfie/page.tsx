@@ -2,13 +2,22 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import {
+  SAMPLE_FAIL,
+  SELFIE_FAIL,
+  SELFIE_NEED,
+  SELFIE_NETWORK,
+  SELFIE_OFFLINE,
+  apiErrorCopy,
+  isTransportError,
+} from "@/lib/fallback-brief";
 import { blobToJpegBase64 } from "@/lib/image-file";
 import { BRIEF_KEY, loadPrefs, savePrefs } from "@/lib/prefs";
 import type { BriefResponse } from "@/lib/types";
 
 export default function SelfiePage() {
   const router = useRouter();
-  const [error, setError] = useState("");
+  const [error, setError] = useState<{ en: string; yue: string } | null>(null);
   const [pending, setPending] = useState(false);
 
   async function send(imageBase64: string) {
@@ -31,29 +40,43 @@ export default function SelfiePage() {
     event.preventDefault();
     const input = event.currentTarget.elements.namedItem("photo");
     const file = input instanceof HTMLInputElement ? input.files?.[0] : undefined;
+    if (!navigator.onLine) {
+      setError(SELFIE_OFFLINE);
+      return;
+    }
     if (!file) {
-      setError("Choose a photo first. 請先揀相。");
+      setError(SELFIE_NEED);
       return;
     }
     setPending(true);
-    setError("");
+    setError(null);
     try {
       await send(await blobToJpegBase64(file));
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Could not read that photo.");
+      setError(
+        isTransportError(caught)
+          ? SELFIE_NETWORK
+          : apiErrorCopy(caught instanceof Error ? caught.message : undefined, SELFIE_FAIL),
+      );
       setPending(false);
     }
   }
 
   async function useSample() {
+    if (!navigator.onLine) {
+      setError(SELFIE_OFFLINE);
+      return;
+    }
     setPending(true);
-    setError("");
+    setError(null);
     try {
       const response = await fetch("/fixtures/selfie-sample.png");
-      if (!response.ok) throw new Error("Sample fixture missing.");
+      if (!response.ok) throw new Error(SAMPLE_FAIL.en);
       await send(await blobToJpegBase64(await response.blob()));
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Could not use the sample.");
+      setError(
+        isTransportError(caught) ? SELFIE_NETWORK : apiErrorCopy(caught instanceof Error ? caught.message : undefined, SAMPLE_FAIL),
+      );
       setPending(false);
     }
   }
@@ -73,12 +96,11 @@ export default function SelfiePage() {
             name="photo"
             type="file"
             accept="image/jpeg,image/png,image/webp"
-            required
           />
         </label>
         {error ? (
           <p role="alert" className="text-sm text-red-800">
-            {error}
+            {error.en} <span lang="zh-HK">{error.yue}</span>
           </p>
         ) : null}
         <button type="submit" className="border border-stone-900 px-3 py-2 disabled:opacity-50" disabled={pending}>

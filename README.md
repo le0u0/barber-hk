@@ -19,6 +19,8 @@ GEMINI_API_KEY=
 
 Leave it empty. The quiz still returns a usable brief from `fixtures/cuts.json`. An invalid key does the same. Do not use `NEXT_PUBLIC_GEMINI_API_KEY`. Set `GEMINI_API_KEY` as a server secret on Vercel.
 
+If the browser is offline, or `/api/brief` cannot be reached, the quiz builds that same saved brief on the phone and says so in English and Cantonese. A selfie is not guessed while offline. An API fallback (no key, or Gemini failed) is labeled **Saved cut 已儲髮型** on the brief, in both languages. An empty brief says what to do in both languages.
+
 ## Guest prefs
 
 `localStorage` key `barber-hk:v1`:
