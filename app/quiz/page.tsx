@@ -90,7 +90,7 @@ export default function QuizPage() {
       <h1 className="text-2xl font-semibold">Quiz 問卷</h1>
       <form className="flex flex-col gap-4" onSubmit={onSubmit}>
         {QUESTIONS.map((question) => (
-          <fieldset key={question.key} className="border border-stone-300 p-3">
+          <fieldset key={question.key} className="card p-3">
             <legend className="px-1 text-sm font-medium">{question.legend}</legend>
             <div className="flex flex-col gap-1">
               {question.options.map(([value, label]) => (
@@ -115,11 +115,11 @@ export default function QuizPage() {
           </fieldset>
         ))}
         {error ? (
-          <p role="alert" className="text-sm text-red-800">
+          <p role="alert" className="alert text-sm">
             {error}
           </p>
         ) : null}
-        <button type="submit" className="border border-stone-900 px-3 py-2 disabled:opacity-50" disabled={pending}>
+        <button type="submit" className="btn-primary disabled:opacity-50" disabled={pending}>
           {pending ? "Making brief…" : "Show brief 出備忘"}
         </button>
       </form>
