@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { Header } from "./header";
+import { LocaleLang } from "./locale-lang";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
+        <LocaleLang />
         <Header />
         <div className="flex-1">{children}</div>
         <footer className="px-4 py-3 text-xs text-stone-600">

@@ -3,11 +3,14 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { blobToJpegBase64 } from "@/lib/image-file";
+import { t } from "@/lib/i18n";
 import { BRIEF_KEY, loadPrefs, savePrefs } from "@/lib/prefs";
+import { usePrefs } from "@/lib/use-prefs";
 import type { BriefResponse } from "@/lib/types";
 
 export default function SelfiePage() {
   const router = useRouter();
+  const lang = usePrefs().lang;
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
 
@@ -19,7 +22,7 @@ export default function SelfiePage() {
     });
     const data = (await response.json()) as BriefResponse & { error?: string };
     if (!response.ok || !data.brief) {
-      throw new Error(data.error || "Could not make a brief.");
+      throw new Error(data.error || t(lang, "couldNotMake"));
     }
     const prefs = loadPrefs();
     savePrefs({ ...prefs, lastCutId: data.cut.id });
@@ -32,7 +35,7 @@ export default function SelfiePage() {
     const input = event.currentTarget.elements.namedItem("photo");
     const file = input instanceof HTMLInputElement ? input.files?.[0] : undefined;
     if (!file) {
-      setError("Choose a photo first. 請先揀相。");
+      setError(t(lang, "choosePhoto"));
       return;
     }
     setPending(true);
@@ -40,7 +43,7 @@ export default function SelfiePage() {
     try {
       await send(await blobToJpegBase64(file));
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Could not read that photo.");
+      setError(caught instanceof Error ? caught.message : t(lang, "couldNotRead"));
       setPending(false);
     }
   }
@@ -50,24 +53,21 @@ export default function SelfiePage() {
     setError("");
     try {
       const response = await fetch("/fixtures/selfie-sample.png");
-      if (!response.ok) throw new Error("Sample fixture missing.");
+      if (!response.ok) throw new Error(t(lang, "sampleMissing"));
       await send(await blobToJpegBase64(await response.blob()));
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Could not use the sample.");
+      setError(caught instanceof Error ? caught.message : t(lang, "couldNotSample"));
       setPending(false);
     }
   }
 
   return (
     <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-6">
-      <h1 className="text-2xl font-semibold">Selfie 自拍</h1>
-      <p className="text-sm">
-        The photo is sent once to make a brief. It is not stored. QA fixture path:{" "}
-        <code>fixtures/selfie-sample.png</code>
-      </p>
+      <h1 className="text-2xl font-semibold">{t(lang, "selfie")}</h1>
+      <p className="text-sm">{t(lang, "selfieLead")}</p>
       <form className="flex flex-col gap-3" onSubmit={onSubmit}>
         <label className="text-sm">
-          Photo 相片
+          {t(lang, "photo")}
           <input
             className="mt-1 block w-full"
             name="photo"
@@ -82,10 +82,10 @@ export default function SelfiePage() {
           </p>
         ) : null}
         <button type="submit" className="border border-stone-900 px-3 py-2 disabled:opacity-50" disabled={pending}>
-          {pending ? "Making brief…" : "Read photo 睇相"}
+          {pending ? t(lang, "makingBrief") : t(lang, "readPhoto")}
         </button>
         <button type="button" className="border px-3 py-2 disabled:opacity-50" disabled={pending} onClick={useSample}>
-          Use sample fixture
+          {t(lang, "useSample")}
         </button>
       </form>
     </main>
