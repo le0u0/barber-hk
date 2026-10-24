@@ -25,7 +25,7 @@ const LABELS = {
 
 function CopyBlock({ lang, title, copy }: { lang: "en" | "yue"; title: string; copy: BriefCopy }) {
   return (
-    <section lang={lang === "yue" ? "zh-HK" : "en"} className="border border-stone-300 bg-white p-3">
+    <section lang={lang === "yue" ? "zh-HK" : "en"} className="border border-stone-600 bg-white p-3">
       <h2 className="font-semibold">{title}</h2>
       {LABELS[lang].map(([key, label]) => (
         <p key={key} className="mt-2 text-sm">
