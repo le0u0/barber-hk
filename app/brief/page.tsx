@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
+import { CutPhoto } from "@/app/cut-photo";
 import { BRIEF_KEY } from "@/lib/prefs";
 import type { BriefCopy, BriefResponse } from "@/lib/types";
 
@@ -84,7 +84,7 @@ export default function BriefPage() {
         </div>
       ) : null}
       <div className="flex items-end gap-3">
-        <Image src={brief.cut.image} alt="" width={96} height={128} unoptimized />
+        <CutPhoto id={brief.cut.id} image={brief.cut.image} />
         <div>
           <h1 className="text-2xl font-semibold">{brief.cut.nameEn}</h1>
           <p lang="zh-HK" className="text-lg">

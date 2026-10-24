@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { listCuts } from "@/lib/catalog";
+import { CutPhoto } from "./cut-photo";
 import { LastPick } from "./header";
 
 export default function Home() {
@@ -28,7 +28,7 @@ export default function Home() {
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {cuts.map((cut) => (
             <li key={cut.id} className="border border-stone-300 bg-white p-2">
-              <Image src={cut.image} alt="" width={120} height={160} unoptimized />
+              <CutPhoto id={cut.id} image={cut.image} />
               <p className="mt-1 text-sm font-medium">{cut.nameEn}</p>
               <p lang="zh-HK" className="text-sm">
                 {cut.nameYue}
