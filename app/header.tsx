@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { t } from "@/lib/i18n";
 import { savePrefs } from "@/lib/prefs";
 import { usePrefs } from "@/lib/use-prefs";
 
@@ -8,8 +9,8 @@ export function Header() {
   const prefs = usePrefs();
   const lang = prefs.lang;
 
-  function toggleLang() {
-    savePrefs({ ...prefs, lang: lang === "en" ? "yue" : "en" });
+  function setLang(next: "en" | "yue") {
+    savePrefs({ ...prefs, lang: next });
   }
 
   return (
@@ -18,23 +19,26 @@ export function Header() {
         Barber HK
       </Link>
       <nav className="flex items-center gap-3 text-sm">
-        <Link href="/quiz">{lang === "yue" ? "問卷" : "Quiz"}</Link>
-        <Link href="/selfie">{lang === "yue" ? "自拍" : "Selfie"}</Link>
-        <button type="button" className="border px-2 py-1" onClick={toggleLang}>
-          {lang === "yue" ? "EN" : "粵"}
-        </button>
+        <Link href="/quiz">{t(lang, "quiz")}</Link>
+        <Link href="/selfie">{t(lang, "selfie")}</Link>
+        <div className="lang-switch" role="group" aria-label={t(lang, "language")}>
+          <button type="button" aria-pressed={lang === "en"} onClick={() => setLang("en")}>EN</button>
+          <span aria-hidden="true">|</span>
+          <button type="button" aria-pressed={lang === "yue"} onClick={() => setLang("yue")}>粵</button>
+        </div>
       </nav>
     </header>
   );
 }
 
 export function LastPick() {
-  const id = usePrefs().lastCutId;
+  const prefs = usePrefs();
+  const id = prefs.lastCutId;
   if (!id) return null;
 
   return (
     <p className="text-sm text-stone-700">
-      Last pick <span lang="zh-HK">上次</span>: <code>{id}</code>
+      {t(prefs.lang, "lastPick")}: <code>{id}</code>
     </p>
   );
 }
