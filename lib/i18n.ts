@@ -33,6 +33,7 @@ const chrome = {
   top: { en: "Top", yue: "頂" },
   fringe: { en: "Fringe", yue: "劉海" },
   finish: { en: "Finish", yue: "造型" },
+  partLine: { en: "Part", yue: "分線" },
   eastAsian: { en: "East Asian hair note", yue: "東亞頭髮注意" },
   skin: { en: "Skin fade", yue: "皮膚漸變" },
   taper: { en: "Taper", yue: "短漸變" },
@@ -116,7 +117,7 @@ export const QUIZ: QuizQuestion[] = [
   },
   {
     key: "part",
-    legend: "part",
+    legend: "partLine",
     options: [
       ["none", "none"],
       ["side", "side"],
