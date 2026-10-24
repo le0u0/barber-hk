@@ -60,7 +60,9 @@ describe("requestQuizBrief", () => {
   });
 
   it("throws the server error when the quiz is rejected", async () => {
-    const fetchImpl = vi.fn().mockResolvedValue(Response.json({ error: "Quiz answers are incomplete." }, { status: 400 }));
+    const fetchImpl = vi.fn().mockImplementation(() =>
+      Promise.resolve(Response.json({ error: "Quiz answers are incomplete." }, { status: 400 })),
+    );
 
     await expect(requestQuizBrief(crop, { onLine: true, fetchImpl })).rejects.toBeInstanceOf(QuizRequestError);
     await expect(requestQuizBrief(crop, { onLine: true, fetchImpl })).rejects.toThrow(/incomplete/);
