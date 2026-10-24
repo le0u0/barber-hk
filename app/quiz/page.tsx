@@ -90,7 +90,7 @@ export default function QuizPage() {
       <h1 className="text-2xl font-semibold">Quiz 問卷</h1>
       <form className="flex flex-col gap-4" onSubmit={onSubmit}>
         {QUESTIONS.map((question) => (
-          <fieldset key={question.key} className="border border-stone-300 p-3">
+          <fieldset key={question.key} className="border border-stone-600 p-3">
             <legend className="px-1 text-sm font-medium">{question.legend}</legend>
             <div className="flex flex-col gap-1">
               {question.options.map(([value, label]) => (
