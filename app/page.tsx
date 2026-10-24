@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { listCuts } from "@/lib/catalog";
 import { LastPick } from "./header";
+import { RecentBriefs } from "./recent-briefs";
 
 export default function Home() {
   const cuts = listCuts();
@@ -12,6 +13,7 @@ export default function Home() {
         <h1 className="text-2xl font-semibold">A brief for your barber</h1>
         <p lang="zh-HK">畀師傅睇嘅備忘。英文同粵語一齊出。</p>
         <LastPick />
+        <RecentBriefs />
       </div>
       <div className="flex gap-3">
         <Link href="/quiz" className="border border-stone-900 px-3 py-2">

@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { BRIEF_KEY, isQuiz, savePrefs } from "@/lib/prefs";
+import { persistGuestBrief } from "@/lib/recent-briefs";
+import { isQuiz, savePrefs } from "@/lib/prefs";
 import { usePrefs } from "@/lib/use-prefs";
 import type { BriefResponse, QuizAnswers } from "@/lib/types";
 
@@ -77,7 +78,7 @@ export default function QuizPage() {
         throw new Error(data.error || "Could not make a brief.");
       }
       savePrefs({ ...prefs, quiz: answers, lastCutId: data.cut.id });
-      sessionStorage.setItem(BRIEF_KEY, JSON.stringify(data));
+      persistGuestBrief(data);
       router.push("/brief");
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Could not make a brief.");
