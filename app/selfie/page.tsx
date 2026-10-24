@@ -2,12 +2,20 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { ChairPair } from "@/app/chair-pair";
+import styles from "@/app/chair.module.css";
+import { chairError, joinCopy, selfieCopy } from "@/lib/chair-copy";
+import { chairStyle } from "@/lib/chair-tokens";
 import { blobToJpegBase64 } from "@/lib/image-file";
 import { BRIEF_KEY, loadPrefs, savePrefs } from "@/lib/prefs";
+import { useChairPaint } from "@/lib/use-chair-paint";
+import { usePrefs } from "@/lib/use-prefs";
 import type { BriefResponse } from "@/lib/types";
 
 export default function SelfiePage() {
   const router = useRouter();
+  const lang = usePrefs().lang;
+  useChairPaint();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
 
@@ -19,7 +27,7 @@ export default function SelfiePage() {
     });
     const data = (await response.json()) as BriefResponse & { error?: string };
     if (!response.ok || !data.brief) {
-      throw new Error(data.error || "Could not make a brief.");
+      throw new Error(data.error || joinCopy(selfieCopy.fail));
     }
     const prefs = loadPrefs();
     savePrefs({ ...prefs, lastCutId: data.cut.id });
@@ -32,7 +40,7 @@ export default function SelfiePage() {
     const input = event.currentTarget.elements.namedItem("photo");
     const file = input instanceof HTMLInputElement ? input.files?.[0] : undefined;
     if (!file) {
-      setError("Choose a photo first. 請先揀相。");
+      setError(joinCopy(selfieCopy.needPhoto));
       return;
     }
     setPending(true);
@@ -40,7 +48,7 @@ export default function SelfiePage() {
     try {
       await send(await blobToJpegBase64(file));
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Could not read that photo.");
+      setError(chairError(caught, selfieCopy.fail));
       setPending(false);
     }
   }
@@ -50,42 +58,40 @@ export default function SelfiePage() {
     setError("");
     try {
       const response = await fetch("/fixtures/selfie-sample.png");
-      if (!response.ok) throw new Error("Sample fixture missing.");
+      if (!response.ok) throw new Error(joinCopy(selfieCopy.sampleMissing));
       await send(await blobToJpegBase64(await response.blob()));
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "Could not use the sample.");
+      setError(chairError(caught, selfieCopy.sampleMissing));
       setPending(false);
     }
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-6">
-      <h1 className="text-2xl font-semibold">Selfie 自拍</h1>
-      <p className="text-sm">
-        The photo is sent once to make a brief. It is not stored. QA fixture path:{" "}
+    <main className={styles.screen} data-chair="selfie" style={chairStyle()}>
+      <h1 className={styles.title}>
+        <ChairPair copy={selfieCopy.title} lang={lang} />
+      </h1>
+      <p className={styles.lede}>
+        <ChairPair copy={selfieCopy.privacy} lang={lang} />
+      </p>
+      <p className={styles.note}>
         <code>fixtures/selfie-sample.png</code>
       </p>
-      <form className="flex flex-col gap-3" onSubmit={onSubmit}>
-        <label className="text-sm">
-          Photo 相片
-          <input
-            className="mt-1 block w-full"
-            name="photo"
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            required
-          />
+      <form className={styles.form} lang={lang === "yue" ? "zh-HK" : "en"} onSubmit={onSubmit}>
+        <label className={styles.file}>
+          <ChairPair copy={selfieCopy.photo} lang={lang} />
+          <input name="photo" type="file" accept="image/jpeg,image/png,image/webp" required />
         </label>
         {error ? (
-          <p role="alert" className="text-sm text-red-800">
+          <p role="alert" className={styles.alert}>
             {error}
           </p>
         ) : null}
-        <button type="submit" className="border border-stone-900 px-3 py-2 disabled:opacity-50" disabled={pending}>
-          {pending ? "Making brief…" : "Read photo 睇相"}
+        <button type="submit" className={styles.primary} disabled={pending}>
+          <ChairPair copy={pending ? selfieCopy.pending : selfieCopy.submit} lang={lang} />
         </button>
-        <button type="button" className="border px-3 py-2 disabled:opacity-50" disabled={pending} onClick={useSample}>
-          Use sample fixture
+        <button type="button" className={styles.line} disabled={pending} onClick={useSample}>
+          <ChairPair copy={selfieCopy.sample} lang={lang} />
         </button>
       </form>
     </main>
