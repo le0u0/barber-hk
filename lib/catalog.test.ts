@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { matchCut } from "./catalog";
+import { isCutId, matchCut } from "./catalog";
 import type { QuizAnswers } from "./types";
 
 function quiz(answers: QuizAnswers): QuizAnswers {
@@ -47,6 +47,12 @@ describe("matchCut", () => {
     expect(
       matchCut(quiz({ sides: "taper", top: "short", finish: "textured", part: "none" })).id,
     ).toBe("french-crop");
+  });
+
+  it("recognises the eight cut ids and rejects anything else", () => {
+    expect(isCutId("induction")).toBe(true);
+    expect(isCutId("not-a-cut")).toBe(false);
+    expect(isCutId(null)).toBe(false);
   });
 
   it("maps a natural medium taper with no part to two-block", () => {

@@ -1,3 +1,4 @@
+import { parseCompare } from "./compare";
 import type { QuizAnswers } from "./types";
 
 export const PREFS_KEY = "barber-hk:v1";
@@ -8,9 +9,10 @@ export type Prefs = {
   lang: "en" | "yue";
   quiz: QuizAnswers | null;
   lastCutId: string | null;
+  compare: { left: string; right: string } | null;
 };
 
-export const EMPTY_PREFS: Prefs = { lang: "en", quiz: null, lastCutId: null };
+export const EMPTY_PREFS: Prefs = { lang: "en", quiz: null, lastCutId: null, compare: null };
 
 const SIDES = ["skin", "taper", "scissor"] as const;
 const TOPS = ["buzz", "short", "medium", "long"] as const;
@@ -43,6 +45,7 @@ function parsePrefs(raw: string | null): Prefs {
       lang: data.lang === "yue" ? "yue" : "en",
       quiz: isQuiz(data.quiz) ? data.quiz : null,
       lastCutId: typeof data.lastCutId === "string" ? data.lastCutId : null,
+      compare: parseCompare(data.compare),
     };
   } catch {
     return EMPTY_PREFS;

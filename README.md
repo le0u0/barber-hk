@@ -26,6 +26,11 @@ Leave it empty. The quiz still returns a usable brief from `fixtures/cuts.json`.
 - `lang`: `en` or `yue` (UI toggle)
 - `quiz`: last quiz answers
 - `lastCutId`: last cut id
+- `compare`: two different cut ids, `{ "left", "right" }`, or omitted
+
+## Compare
+
+`/compare` puts two cuts side by side so you can read the difference to the barber. The pair stays in guest prefs. The same cut cannot be chosen twice.
 
 The brief shown on `/brief` is held in `sessionStorage` (`barber-hk:brief`) for that tab. Nothing is stored on the server.
 

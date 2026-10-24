@@ -20,6 +20,7 @@ export function Header() {
       <nav className="flex items-center gap-3 text-sm">
         <Link href="/quiz">{lang === "yue" ? "問卷" : "Quiz"}</Link>
         <Link href="/selfie">{lang === "yue" ? "自拍" : "Selfie"}</Link>
+        <Link href="/compare">{lang === "yue" ? "比較" : "Compare"}</Link>
         <button type="button" className="border px-2 py-1" onClick={toggleLang}>
           {lang === "yue" ? "EN" : "粵"}
         </button>

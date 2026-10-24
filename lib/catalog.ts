@@ -53,6 +53,10 @@ export function getCut(id: string): Cut | undefined {
   return cuts.find((cut) => cut.id === id);
 }
 
+export function isCutId(value: unknown): value is string {
+  return typeof value === "string" && cuts.some((cut) => cut.id === value);
+}
+
 export function matchCut(answers: QuizAnswers): Cut {
   const id = matchId(answers);
   const cut = getCut(id);

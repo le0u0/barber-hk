@@ -46,7 +46,7 @@ describe("guest prefs", () => {
     );
     invalidatePrefs();
 
-    expect(loadPrefs()).toEqual({ lang: "yue", quiz: null, lastCutId: "curtain" });
+    expect(loadPrefs()).toEqual({ lang: "yue", quiz: null, lastCutId: "curtain", compare: null });
   });
 
   it("ignores stored prefs that are not json", () => {
@@ -57,9 +57,31 @@ describe("guest prefs", () => {
   });
 
   it("saves language, quiz, and last cut for the next load", () => {
-    savePrefs({ lang: "yue", quiz: validQuiz, lastCutId: "crop-fade" });
+    savePrefs({ lang: "yue", quiz: validQuiz, lastCutId: "crop-fade", compare: null });
 
-    expect(loadPrefs()).toEqual({ lang: "yue", quiz: validQuiz, lastCutId: "crop-fade" });
+    expect(loadPrefs()).toEqual({
+      lang: "yue",
+      quiz: validQuiz,
+      lastCutId: "crop-fade",
+      compare: null,
+    });
     expect(localStorage.getItem(PREFS_KEY)).toContain("crop-fade");
+  });
+
+  it("keeps two different cuts and drops a pair of the same cut", () => {
+    savePrefs({
+      lang: "en",
+      quiz: null,
+      lastCutId: null,
+      compare: { left: "curtain", right: "pompadour" },
+    });
+    expect(loadPrefs().compare).toEqual({ left: "curtain", right: "pompadour" });
+
+    localStorage.setItem(
+      PREFS_KEY,
+      JSON.stringify({ lang: "en", compare: { left: "curtain", right: "curtain" } }),
+    );
+    invalidatePrefs();
+    expect(loadPrefs().compare).toBeNull();
   });
 });

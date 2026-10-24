@@ -13,12 +13,15 @@ export default function Home() {
         <p lang="zh-HK">畀師傅睇嘅備忘。英文同粵語一齊出。</p>
         <LastPick />
       </div>
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-3">
         <Link href="/quiz" className="border border-stone-900 px-3 py-2">
           Quiz 問卷
         </Link>
         <Link href="/selfie" className="border border-stone-900 px-3 py-2">
           Selfie 自拍
+        </Link>
+        <Link href="/compare" className="border border-stone-900 px-3 py-2">
+          Compare 比較
         </Link>
       </div>
       <section>
