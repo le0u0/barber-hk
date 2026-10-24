@@ -12,6 +12,8 @@ A brief for a Hong Kong men's haircut. Take a short quiz, or send a selfie, and 
 4. Read the brief in English and 粵語, and show that screen to the barber.
 5. Optional: switch the site between English and 粵語. That choice, and your last answers, stay in this browser.
 
+On a phone, add the site to your home screen from the browser menu. It opens like an app.
+
 ## What you get
 
 Eight Hong Kong-friendly cuts. Each one comes with a brief you can read out, in English and 粵語: what to ask, sides, top, fringe, and finish. No account needed.
