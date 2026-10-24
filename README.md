@@ -1,52 +1,34 @@
 # Barber HK
 
-Free Next.js app for a Hong Kong men's barber brief. Quiz or selfie, then one screen in English and 粵語.
+A brief for a Hong Kong men's haircut. Take a short quiz, or send a selfie, and get one page in English and 粵語 you can show the barber.
 
-No accounts. Guest prefs stay in the browser. Gemini is optional.
+**[Open Barber HK](https://barber-hk.vercel.app)**
 
-## Run
+## How to use
 
-```bash
-npm install
-npm run dev
-```
+1. Open [barber-hk.vercel.app](https://barber-hk.vercel.app).
+2. Choose **Quiz 問卷** or **Selfie 自拍**.
+3. Answer the four questions, or choose a photo of your hair.
+4. Read the brief in English and 粵語, and show that screen to the barber.
+5. Optional: switch the site between English and 粵語. That choice, and your last answers, stay in this browser.
 
-Optional server env (see `.env.example`):
+## What you get
 
-```bash
-GEMINI_API_KEY=
-```
+Eight Hong Kong-friendly cuts. Each one comes with a brief you can read out, in English and 粵語: what to ask, sides, top, fringe, and finish. No account needed.
 
-Leave it empty. The quiz still returns a usable brief from `fixtures/cuts.json`. An invalid key does the same. Do not use `NEXT_PUBLIC_GEMINI_API_KEY`. Set `GEMINI_API_KEY` as a server secret on Vercel.
+- Textured crop fade · 碎蓋漸變
+- French crop · 法式碎蓋
+- Two-block · 兩節頭
+- Office side part · 側分公事頭
+- Curtain middle part · 中分八字劉海
+- Slick undercut · 底剷油頭
+- Short pompadour · 短龐帕度
+- Induction buzz · 陸軍裝
 
-## Guest prefs
+## Privacy
 
-`localStorage` key `barber-hk:v1`:
+Your language, quiz answers, and last cut stay in this browser. Nothing is stored on the server.
 
-- `lang`: `en` or `yue` (UI toggle)
-- `quiz`: last quiz answers
-- `lastCutId`: last cut id
+A selfie is sent once so the brief can be written. The photo is not kept on the server.
 
-The brief shown on `/brief` is held in `sessionStorage` (`barber-hk:brief`) for that tab. Nothing is stored on the server.
-
-## QA fixtures
-
-- `fixtures/cuts.json` — exactly 8 cuts, stable ids: `crop-fade`, `french-crop`, `two-block`, `side-part`, `curtain`, `undercut`, `pompadour`, `induction`
-- `fixtures/selfie-sample.png` — sample selfie diagram for the upload path (not a customer photo). The same file is served at `/fixtures/selfie-sample.png`. The selfie screen has **Use sample fixture**.
-
-Reference diagrams: `public/cuts/<id>.svg`. East Asian male hair notes are English only, on the brief.
-
-## Deploy SHA (AC-06)
-
-The footer prints `VERCEL_GIT_COMMIT_SHA`, then `GITHUB_SHA`, then `local`, and sets `data-deploy-sha` to the full value. Vercel injects the commit SHA at build, so the production page shows that deploy. This repo does not attach a custom domain.
-
-## API
-
-`POST /api/brief`
-
-- Quiz: `{ "path": "quiz", "answers": { "sides", "top", "finish", "part" } }`
-- Selfie: `{ "path": "selfie", "mimeType": "image/jpeg"|"image/png"|"image/webp", "imageBase64" }`
-
-`GET /api/brief` returns `{ count: 8, ids: [...] }`.
-
-Responses never include `GEMINI_API_KEY`.
+Contributors: see package scripts / `.env.example`.
