@@ -13,14 +13,18 @@ export function Header() {
   }
 
   return (
-    <header className="flex items-center justify-between gap-3 px-4 py-3">
+    <header className="site-header">
       <Link href="/" className="font-semibold tracking-tight">
         Barber HK
       </Link>
       <nav className="flex items-center gap-3 text-sm">
-        <Link href="/quiz">{lang === "yue" ? "問卷" : "Quiz"}</Link>
-        <Link href="/selfie">{lang === "yue" ? "自拍" : "Selfie"}</Link>
-        <button type="button" className="border px-2 py-1" onClick={toggleLang}>
+        <Link className="nav-link" href="/quiz">
+          {lang === "yue" ? "問卷" : "Quiz"}
+        </Link>
+        <Link className="nav-link" href="/selfie">
+          {lang === "yue" ? "自拍" : "Selfie"}
+        </Link>
+        <button type="button" className="btn-quiet" onClick={toggleLang}>
           {lang === "yue" ? "EN" : "粵"}
         </button>
       </nav>
@@ -33,7 +37,7 @@ export function LastPick() {
   if (!id) return null;
 
   return (
-    <p className="text-sm text-stone-700">
+    <p className="muted text-sm">
       Last pick <span lang="zh-HK">上次</span>: <code>{id}</code>
     </p>
   );

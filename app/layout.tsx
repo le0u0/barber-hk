@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-full flex flex-col">
         <Header />
         <div className="flex-1">{children}</div>
-        <footer className="px-4 py-3 text-xs text-stone-600">
+        <footer className="muted px-4 py-3 text-xs">
           <p data-deploy-sha={sha}>
             Deploy SHA: <code>{sha}</code>
           </p>

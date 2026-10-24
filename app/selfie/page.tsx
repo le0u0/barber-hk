@@ -77,14 +77,14 @@ export default function SelfiePage() {
           />
         </label>
         {error ? (
-          <p role="alert" className="text-sm text-red-800">
+          <p role="alert" className="alert text-sm">
             {error}
           </p>
         ) : null}
-        <button type="submit" className="border border-stone-900 px-3 py-2 disabled:opacity-50" disabled={pending}>
+        <button type="submit" className="btn-primary disabled:opacity-50" disabled={pending}>
           {pending ? "Making brief…" : "Read photo 睇相"}
         </button>
-        <button type="button" className="border px-3 py-2 disabled:opacity-50" disabled={pending} onClick={useSample}>
+        <button type="button" className="btn-quiet disabled:opacity-50" disabled={pending} onClick={useSample}>
           Use sample fixture
         </button>
       </form>

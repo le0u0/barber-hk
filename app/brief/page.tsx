@@ -25,7 +25,7 @@ const LABELS = {
 
 function CopyBlock({ lang, title, copy }: { lang: "en" | "yue"; title: string; copy: BriefCopy }) {
   return (
-    <section lang={lang === "yue" ? "zh-HK" : "en"} className="border border-stone-300 bg-white p-3">
+    <section lang={lang === "yue" ? "zh-HK" : "en"} className="card p-3">
       <h2 className="font-semibold">{title}</h2>
       {LABELS[lang].map(([key, label]) => (
         <p key={key} className="mt-2 text-sm">
@@ -61,10 +61,10 @@ export default function BriefPage() {
       <main className="mx-auto flex max-w-xl flex-col gap-3 px-4 py-6">
         <h1 className="text-2xl font-semibold">No brief yet</h1>
         <p lang="zh-HK">未有備忘。先做問卷或者自拍。</p>
-        <Link href="/quiz" className="underline">
+        <Link href="/quiz" className="btn-primary">
           Quiz 問卷
         </Link>
-        <Link href="/selfie" className="underline">
+        <Link href="/selfie" className="btn-primary">
           Selfie 自拍
         </Link>
       </main>
@@ -73,12 +73,12 @@ export default function BriefPage() {
 
   return (
     <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-6">
-      <p className="text-xs uppercase tracking-wide text-stone-600">
+      <p className="muted text-xs uppercase tracking-wide">
         {brief.source === "gemini" ? "Gemini" : "Static fallback"}
         {brief.fallbackReason ? ` (${brief.fallbackReason})` : ""}
       </p>
       {brief.notice ? (
-        <div className="border border-amber-700 bg-amber-50 p-3 text-sm" role="status">
+        <div className="notice p-3 text-sm" role="status">
           <p>{brief.notice.en}</p>
           <p lang="zh-HK">{brief.notice.yue}</p>
         </div>
@@ -90,7 +90,7 @@ export default function BriefPage() {
           <p lang="zh-HK" className="text-lg">
             {brief.cut.nameYue}
           </p>
-          <p className="text-xs text-stone-600">
+          <p className="muted text-xs">
             <code>{brief.cut.id}</code>
           </p>
         </div>

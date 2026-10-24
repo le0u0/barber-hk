@@ -14,10 +14,10 @@ export default function Home() {
         <LastPick />
       </div>
       <div className="flex gap-3">
-        <Link href="/quiz" className="border border-stone-900 px-3 py-2">
+        <Link href="/quiz" className="btn-primary">
           Quiz 問卷
         </Link>
-        <Link href="/selfie" className="border border-stone-900 px-3 py-2">
+        <Link href="/selfie" className="btn-primary">
           Selfie 自拍
         </Link>
       </div>
@@ -27,13 +27,13 @@ export default function Home() {
         </h2>
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {cuts.map((cut) => (
-            <li key={cut.id} className="border border-stone-300 bg-white p-2">
+            <li key={cut.id} className="card p-2">
               <Image src={cut.image} alt="" width={120} height={160} unoptimized />
               <p className="mt-1 text-sm font-medium">{cut.nameEn}</p>
               <p lang="zh-HK" className="text-sm">
                 {cut.nameYue}
               </p>
-              <p className="text-xs text-stone-600">
+              <p className="muted text-xs">
                 <code>{cut.id}</code>
               </p>
             </li>

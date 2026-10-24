@@ -1,7 +1,99 @@
 @import "tailwindcss";
 
+:root {
+  --canvas: #f4efe6;
+  --elevated: #fffcfa;
+  --ink: #12141a;
+  --muted: #6b6560;
+  --line: #d9d2c7;
+  --accent: #c8102e;
+  --accent-ink: #fffcfa;
+  --focus: #c8102e;
+  --danger: #9b1b1b;
+  --radius-card: 12px;
+  --tap-min: 44px;
+}
+
 body {
-  background: #f4efe6;
-  color: #1c1915;
-  font-family: var(--font-sans), "PingFang HK", "Noto Sans HK", "Microsoft JhengHei", sans-serif;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-geist-sans), "PingFang HK", "Noto Sans HK", "Microsoft JhengHei", sans-serif;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+input[type="radio"] {
+  accent-color: var(--accent);
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--line);
+  padding: 0.75rem 1rem;
+  color: var(--ink);
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  padding: 0 0.25rem;
+  color: var(--ink);
+}
+
+.btn-primary,
+.btn-quiet {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap-min);
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--radius-card);
+  font-weight: 600;
+}
+
+.btn-primary {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.btn-quiet {
+  border: 1px solid var(--ink);
+  background: var(--elevated);
+  color: var(--ink);
+}
+
+.btn-primary:disabled,
+.btn-quiet:disabled {
+  opacity: 0.5;
+}
+
+.card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--elevated);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.alert {
+  color: var(--danger);
+}
+
+.notice {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--elevated);
+  color: var(--ink);
 }
