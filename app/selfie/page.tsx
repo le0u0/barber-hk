@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { blobToJpegBase64 } from "@/lib/image-file";
-import { BRIEF_KEY, loadPrefs, savePrefs } from "@/lib/prefs";
+import { loadPrefs, savePrefs } from "@/lib/prefs";
+import { persistGuestBrief } from "@/lib/recent-briefs";
 import type { BriefResponse } from "@/lib/types";
 
 export default function SelfiePage() {
@@ -23,7 +24,7 @@ export default function SelfiePage() {
     }
     const prefs = loadPrefs();
     savePrefs({ ...prefs, lastCutId: data.cut.id });
-    sessionStorage.setItem(BRIEF_KEY, JSON.stringify(data));
+    persistGuestBrief(data);
     router.push("/brief");
   }
 

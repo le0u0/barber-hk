@@ -27,7 +27,7 @@ Eight Hong Kong-friendly cuts. Each one comes with a brief you can read out, in 
 
 ## Privacy
 
-Your language, quiz answers, and last cut stay in this browser. Nothing is stored on the server.
+Your language, quiz answers, last cut, and a count of recent briefs stay in this browser. Nothing is stored on the server.
 
 A selfie is sent once so the brief can be written. The photo is not kept on the server.
 
