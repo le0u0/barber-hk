@@ -2,10 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { BriefView } from "@/app/brief-view";
 import { QUIZ_FAIL, QUIZ_INCOMPLETE, apiErrorCopy, requestQuizBrief } from "@/lib/fallback-brief";
 import { BRIEF_KEY, isQuiz, savePrefs } from "@/lib/prefs";
 import { usePrefs } from "@/lib/use-prefs";
-import type { QuizAnswers } from "@/lib/types";
+import type { BriefResponse, QuizAnswers } from "@/lib/types";
 
 const QUESTIONS: Array<{
   key: keyof QuizAnswers;
@@ -58,6 +59,7 @@ export default function QuizPage() {
   const answers = draft ?? prefs.quiz ?? {};
   const [error, setError] = useState<{ en: string; yue: string } | null>(null);
   const [pending, setPending] = useState(false);
+  const [offlineBrief, setOfflineBrief] = useState<BriefResponse | null>(null);
 
   async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -71,12 +73,29 @@ export default function QuizPage() {
       const data = await requestQuizBrief(answers, { onLine: navigator.onLine });
       savePrefs({ ...prefs, quiz: answers, lastCutId: data.cut.id });
       sessionStorage.setItem(BRIEF_KEY, JSON.stringify(data));
+      if (data.fallbackReason === "offline") {
+        setOfflineBrief(data);
+        setPending(false);
+        return;
+      }
       router.push("/brief");
     } catch (caught) {
       const message = caught instanceof Error ? caught.message : undefined;
       setError(apiErrorCopy(message, QUIZ_FAIL));
       setPending(false);
     }
+  }
+
+  if (offlineBrief) {
+    return (
+      <main className="mx-auto flex w-full max-w-xl flex-col gap-4 px-4 py-6">
+        <h1 className="text-2xl font-semibold">Quiz 問卷</h1>
+        <BriefView brief={offlineBrief} />
+        <button type="button" className="border border-stone-900 px-3 py-2" onClick={() => setOfflineBrief(null)}>
+          Change answers <span lang="zh-HK">改答案</span>
+        </button>
+      </main>
+    );
   }
 
   return (
