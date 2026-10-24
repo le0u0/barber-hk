@@ -3,7 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useSyncExternalStore } from "react";
+import { BarberShow } from "@/app/barber-show";
+import { barberControlStyle, barberCopy, briefLines } from "@/lib/barber-show";
 import { BRIEF_KEY } from "@/lib/prefs";
+import { useBarberShow } from "@/lib/use-barber-show";
 import type { BriefCopy, BriefResponse } from "@/lib/types";
 
 const LABELS = {
@@ -46,6 +49,7 @@ function readBrief() {
 }
 
 export default function BriefPage() {
+  const show = useBarberShow();
   const raw = useSyncExternalStore(subscribe, readBrief, () => null);
   let brief: BriefResponse | null = null;
   if (raw) {
@@ -82,6 +86,32 @@ export default function BriefPage() {
           <p>{brief.notice.en}</p>
           <p lang="zh-HK">{brief.notice.yue}</p>
         </div>
+      ) : null}
+      <button
+        type="button"
+        className="w-full px-3 text-base font-bold"
+        style={barberControlStyle()}
+        aria-haspopup="dialog"
+        onClick={() =>
+          void show.open({
+            id: brief.cut.id,
+            nameEn: brief.cut.nameEn,
+            nameYue: brief.cut.nameYue,
+            image: brief.cut.image,
+            note: brief.cut.eastAsianNote,
+            lines: briefLines(brief.brief),
+          })
+        }
+      >
+        {barberCopy.open.en} <span lang="zh-HK">{barberCopy.open.yue}</span>
+      </button>
+      {show.card ? (
+        <BarberShow
+          card={show.card}
+          status={show.status}
+          onClose={() => void show.close()}
+          onBright={() => void show.retryBright()}
+        />
       ) : null}
       <div className="flex items-end gap-3">
         <Image src={brief.cut.image} alt="" width={96} height={128} unoptimized />
